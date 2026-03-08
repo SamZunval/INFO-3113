@@ -19,13 +19,20 @@ function App() {
     setSnackbarMessage(text);
     setSnackbarVisible(true);
   }
+  
 const theme = createTheme({
   palette: {
     primary: {
       main: "#f680dc"
-    }
+    },
+
+  text:{
+    primary: "#3d0f3e"
+      }
   }
+ 
 });
+  
   return (<ThemeProvider theme={theme}>
     <Header appTitle="P1 c_tidy" log={openSnackbar} />
     <Snackbar
