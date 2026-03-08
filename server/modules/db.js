@@ -38,6 +38,9 @@ const findDocument = (context, database, collection, criteria, projection = { _i
 const findDocuments = (context, database, collection, criteria, projection = { _id: 0 }) => {
     return context.db(database).collection(collection).find(criteria, { projection }).toArray();
 }
+const replaceDocument = (context, database, collection, criteria,  change) => {
+    return context.db(database).collection(collection).replaceOne(criteria, change, {});
+}
 export {
     initDatabase,
     insertDocument,
@@ -46,5 +49,6 @@ export {
     deleteCollection,
     deleteDatabase,
     findDocument,
-    findDocuments
+    findDocuments,
+    replaceDocument
 };

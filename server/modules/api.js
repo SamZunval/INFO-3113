@@ -1,7 +1,15 @@
 import { readFile } from "node:fs/promises";
 import express from "express";
 import cors from "cors";
-import { refreshDatabase, retrieveAlerts , retrieveAlert,addBookmark, retrieveBookmarks,retrieveBookmark,removeBookmark} from './data.js';
+import {  retrieveUsers,
+    retrieveUser,
+    addUser,
+    removeUser,
+    updateUser,
+    addImage,
+    removeImage,
+    retrieveImages,
+    retrieveImage} from './data.js';
 
 // The Express application object
 const app = express();
@@ -22,45 +30,20 @@ app.use((req, _res, next) => {
     next();
 });
 // Endpoint Definitions
-app.get('/about', (_request, response) => {
-    response.sendFile("package.json", { root: '.' });
+//users
+app.get('/users', async (_request, response) => {
+    let users = await retrieveUsers();
+    response.json(users);
 });
-app.get('/about/:what', async (request, response) => {
-    // Read the route params
-    const field_key = request.params.what;
 
-    let responseJson = {};
+app.get('/users/:what', async (_request, response) => {
+    const user_id = _request.params.what;
+    let users = await retrieveUser(user_id);
+    response.json(users);
+});
+app.post('/db/adduser', async (_request, response) => {
     try {
-        // Read the package.json file, then convert into a JSON object to read a single field
-        let pjFile = await readFile("package.json");
-        let pjText = await pjFile.toString();
-        let pjObject = await JSON.parse(pjText);
-
-        // Extract the field of :what
-        let value = pjObject[field_key];
-
-        // Create a JSON object to responde with
-        responseJson[field_key] = value;
-    }
-    catch (e) {
-        console.error(e);
-        response.sendStatus(500);
-    }
-
-    response.json(responseJson);
-});
-app.get('/alerts', async (_request, response) => {
-    let alerts = await retrieveAlerts();
-    response.json(alerts);
-});
-app.get('/alerts/:what', async (_request, response) => {
-    const country_code = _request.params.what;
-    let alerts = await retrieveAlert(country_code);
-    response.json(alerts);
-});
-app.post('/db/refresh', async (_request, response) => {
-    try {
-        await refreshDatabase();
+        await addUser(_request.body);
         response.sendStatus(200);
     }
     catch (e) {
@@ -68,18 +51,9 @@ app.post('/db/refresh', async (_request, response) => {
         response.sendStatus(500);
     }
 });
-app.get('/bookmarks', async (_request, response) => {
-    let alerts = await retrieveBookmarks();
-    response.json(alerts);
-});
-app.get('/bookmarks/:what', async (_request, response) => {
-    const country_code = _request.params.what;
-    let alerts = await retrieveBookmark(country_code);
-    response.json(alerts);
-});
-app.post('/db/bookmark', async (_request, response) => {
+app.post('/db/removeuser', async (_request, response) => {
     try {
-        await addBookmark(_request.body);
+        await removeUser(_request.body);
         response.sendStatus(200);
     }
     catch (e) {
@@ -87,9 +61,9 @@ app.post('/db/bookmark', async (_request, response) => {
         response.sendStatus(500);
     }
 });
-app.post('/db/removebookmark', async (_request, response) => {
+app.post('/db/updateuser', async (_request, response) => {
     try {
-        await removeBookmark(_request.body);
+        await updateUser(_request.body);
         response.sendStatus(200);
     }
     catch (e) {
@@ -97,9 +71,42 @@ app.post('/db/removebookmark', async (_request, response) => {
         response.sendStatus(500);
     }
 });
+//Images
+app.post('/db/addimage', async (_request, response) => {
+    try {
+        await addImage(_request.body);
+        response.sendStatus(200);
+    }
+    catch (e) {
+        console.error(e);
+        response.sendStatus(500);
+    }
+});
+app.post('/db/removeimage/:what', async (_request, response) => {
+    try {
+        const image_id = _request.params.what;
+        await removeImage(image_id);
+        response.sendStatus(200);
+    }
+    catch (e) {
+        console.error(e);
+        response.sendStatus(500);
+    }
+});
+app.get('/images/:what', async (_request, response) => {
+    const user_id = _request.params.what;
+    let images = await retrieveImages(user_id);
+    response.json(images);
+});
+app.get('/image/:what', async (_request, response) => {
+    const image_id = _request.params.what;
+    let images = await retrieveImage(image_id);
+    response.json(images);
+});
+/*
 app.get('/bookmark', function (req, res) {//handles routing for the client
   res.sendFile("public/index.html",{ root: '.' });
-});
+});*/
 const startServer = (port) => {
     app.listen(port, console.warn(`Listening on port ${port}`));
 };

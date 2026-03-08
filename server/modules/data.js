@@ -3,82 +3,18 @@ import * as db from './db.js'
 import * as fs from "node:fs/promises";
 
 const DATABASE_NAME = "project-1";
-const ADVISORY_COLLECTION = "raw_advisories";
-const ISO_COUNTRIES_COLLECTION = "iso_countries";
-const ALERTS_COLLECTION = "alerts";
-const BOOKMARK_COLLECTION = "bookmarks";
+const IMAGE_COLLECTION = "images";
+const USER_COLLECTION = "users";
 
-const mergeData = (isoCountries, rawAdvisories) => {
-
-    const advisories = rawAdvisories.data;
-    let countries = isoCountries.map(isoCountry => {
-
-        const { name, region } = isoCountry;
-        const code = isoCountry['alpha-2'];
-        const sub_region = isoCountry['sub-region'];
-
-        let advisoryEntry = advisories[code]; // Check for a match for the "left-join"
-        const date = advisoryEntry ? advisories[code]['date-published']['date'] : '';
-        const advisory = advisoryEntry ? advisories[code]['eng']['advisory-text'] : '';
-
-        return { country_name: name, country_code: code, region, sub_region, advisory, date }; // return of map, not of processData
-    });
-
-    return countries;
-}
-
-const refreshDatabase = async () => {
-    let context = undefined;
-    try {
-        // Initialize the database
-        context = await db.initDatabase(env.DB_URI);
-
-        // Retrieve advisory data with an API web request
-        let response = await fetch(env.ADVISORIES_URL);
-        let rawAdvisories = await response.json();
-        let timestamp = rawAdvisories.metadata.generated.date;
-
-        // Drop then re-create thea database
-        let result = await db.deleteDatabase(context, DATABASE_NAME);
-        console.log(`Database ${DATABASE_NAME} dropped.`);
-        result = await db.insertDocument(context, DATABASE_NAME, ADVISORY_COLLECTION, rawAdvisories);
-        console.log(`Advisories from ${timestamp} loaded into ${ADVISORY_COLLECTION}`);
-
-        // Read a file from the iso-countries.json file from the OS
-        let isoFile = await fs.readFile(env.ISO_FILE_PATH);
-        let isoText = await isoFile.toString();
-        let isoCountries = await JSON.parse(isoText);
-
-        // Write to the database
-        result = await db.insertDocuments(context, DATABASE_NAME, ISO_COUNTRIES_COLLECTION, isoCountries);
-        console.log(`${result.insertedCount} country codes loaded into ${ISO_COUNTRIES_COLLECTION}`);
-
-        // Alert data processing
-        let mergedData = mergeData(isoCountries, rawAdvisories);
-        result = await db.insertDocuments(context, DATABASE_NAME, ALERTS_COLLECTION, mergedData);
-        console.log(`${result.insertedCount} alerts loaded into ${ALERTS_COLLECTION}`);
-    }
-    catch (e) {
-        console.error(e);
-    }
-    finally {
-        context?.close();
-    }
-}
-const retrieveAlerts = async () => {
-    let alerts = [];
+const retrieveUsers = async () => {
+    let users = [];
 
     let context = undefined;
     try {
         // Initialize the database
         context = await db.initDatabase(env.DB_URI);
-        const projection = {
-            _id: 0,
-            country_code: 1,
-            country_name: 1
-        }
 
-        alerts = await db.findDocuments(context, DATABASE_NAME, ALERTS_COLLECTION, {}, projection);
+        users = await db.findDocuments(context, DATABASE_NAME, USER_COLLECTION, {}, {});
     }
     catch (e) {
         console.error(e);
@@ -87,17 +23,18 @@ const retrieveAlerts = async () => {
         context?.close();
     }
 
-    return alerts;
+    return users;
 }
-const retrieveAlert = async (country) => {
-    let alerts = [];
+const retrieveUser = async (user_id) => {
+    let users = [];
 
     let context = undefined;
     try {
         // Initialize the database
         context = await db.initDatabase(env.DB_URI);
 
-        alerts = await db.findDocuments(context, DATABASE_NAME, ALERTS_COLLECTION, {country_code : country}, {});
+        //users = await db.findDocuments(context, DATABASE_NAME, USER_COLLECTION, {first_name: user.first_name, last_name: user.last_name}, {});
+        users = await db.findDocument(context, DATABASE_NAME, USER_COLLECTION, {_id : user_id}, {});
     }
     catch (e) {
         console.error(e);
@@ -106,17 +43,17 @@ const retrieveAlert = async (country) => {
         context?.close();
     }
 
-    return alerts;
+    return users;
 }
-const addBookmark = async (country) => {
+const addUser = async (user) => {
 
     let context = undefined;
     try {
         // Initialize the database
         context = await db.initDatabase(env.DB_URI);
 
-        let result = await db.insertDocument(context, DATABASE_NAME, BOOKMARK_COLLECTION, country);
-        console.log(`${result.insertedCount} bookmark loaded into ${BOOKMARK_COLLECTION}`);
+        let result = await db.insertDocument(context, DATABASE_NAME, USER_COLLECTION, user);
+        //console.log(`${result.insertedCount} user loaded into ${USER_COLLECTION}`);
     }
     catch (e) {
         console.error(e);
@@ -125,15 +62,15 @@ const addBookmark = async (country) => {
         context?.close();
     }
 }
-const removeBookmark = async (country) => {
+const removeUser = async (user) => {
 
     let context = undefined;
     try {
         // Initialize the database
         context = await db.initDatabase(env.DB_URI);
 
-        let result = await db.deleteDocument(context, DATABASE_NAME, BOOKMARK_COLLECTION, country);
-        console.log(`${result.insertedCount} bookmark removed from ${BOOKMARK_COLLECTION}`);
+        let result = await db.deleteDocument(context, DATABASE_NAME, USER_COLLECTION, {_id: user._id});
+        //console.log(`${result.insertedCount} user removed from ${USER_COLLECTION}`);
     }
     catch (e) {
         console.error(e);
@@ -142,15 +79,15 @@ const removeBookmark = async (country) => {
         context?.close();
     }
 }
-const retrieveBookmarks = async () => {
-    let alerts = [];
+const updateUser = async (user) => {
 
     let context = undefined;
     try {
         // Initialize the database
         context = await db.initDatabase(env.DB_URI);
 
-        alerts = await db.findDocuments(context, DATABASE_NAME, BOOKMARK_COLLECTION, {}, {});
+        let result = await db.replaceDocument(context, DATABASE_NAME, USER_COLLECTION, {_id : user._id}, user);
+        //console.log(`${result.insertedCount} user removed from ${USER_COLLECTION}`);
     }
     catch (e) {
         console.error(e);
@@ -158,18 +95,50 @@ const retrieveBookmarks = async () => {
     finally {
         context?.close();
     }
-
-    return alerts;
 }
-const retrieveBookmark = async (country) => {
-    let alerts = [];
+const addImage = async (image) => {
 
     let context = undefined;
     try {
         // Initialize the database
         context = await db.initDatabase(env.DB_URI);
 
-        alerts = await db.findDocuments(context, DATABASE_NAME, BOOKMARK_COLLECTION, {country_code : country}, {});
+        let result = await db.insertDocument(context, DATABASE_NAME, IMAGE_COLLECTION, image);
+        //console.log(`${result.insertedCount} user loaded into ${USER_COLLECTION}`);
+    }
+    catch (e) {
+        console.error(e);
+    }
+    finally {
+        context?.close();
+    }
+}
+const removeImage = async (image) => {
+
+    let context = undefined;
+    try {
+        // Initialize the database
+        context = await db.initDatabase(env.DB_URI);
+
+        let result = await db.deleteDocument(context, DATABASE_NAME, IMAGE_COLLECTION, {_id: image});
+        //console.log(`${result.insertedCount} user removed from ${USER_COLLECTION}`);
+    }
+    catch (e) {
+        console.error(e);
+    }
+    finally {
+        context?.close();
+    }
+}
+const retrieveImages = async (user) => {
+    let images = [];
+
+    let context = undefined;
+    try {
+        // Initialize the database
+        context = await db.initDatabase(env.DB_URI);
+
+        images = await db.findDocuments(context, DATABASE_NAME, IMAGE_COLLECTION, {user_id: user}, {});
     }
     catch (e) {
         console.error(e);
@@ -178,19 +147,39 @@ const retrieveBookmark = async (country) => {
         context?.close();
     }
 
-    return alerts;
+    return images;
+}
+const retrieveImage = async (data) => {
+    let image = [];
+
+    let context = undefined;
+    try {
+        // Initialize the database
+        context = await db.initDatabase(env.DB_URI);
+
+        //users = await db.findDocuments(context, DATABASE_NAME, USER_COLLECTION, {first_name: user.first_name, last_name: user.last_name}, {});
+        image = await db.findDocument(context, DATABASE_NAME, USER_COLLECTION, {_id : data}, {});
+    }
+    catch (e) {
+        console.error(e);
+    }
+    finally {
+        context?.close();
+    }
+
+    return image;
 }
 export {
-    refreshDatabase,
     DATABASE_NAME,
-    ADVISORY_COLLECTION,
-    ISO_COUNTRIES_COLLECTION,
-    ALERTS_COLLECTION,
-    BOOKMARK_COLLECTION,
-    retrieveAlerts,
-    retrieveAlert,
-    addBookmark,
-    retrieveBookmarks,
-    retrieveBookmark,
-    removeBookmark
+    IMAGE_COLLECTION,
+    USER_COLLECTION,
+    retrieveUsers,
+    retrieveUser,
+    addUser,
+    removeUser,
+    updateUser,
+    addImage,
+    removeImage,
+    retrieveImages,
+    retrieveImage
 };
