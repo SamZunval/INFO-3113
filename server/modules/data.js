@@ -2,9 +2,9 @@ import env from './env.js';
 import * as db from './db.js'
 import * as fs from "node:fs/promises";
 
-const DATABASE_NAME = "project-1";
-const IMAGE_COLLECTION = "images";
-const USER_COLLECTION = "users";
+const DATABASE_NAME = "UsersInfo";
+const IMAGE_COLLECTION = "Images";
+const USER_COLLECTION = "Users";
 
 const retrieveUsers = async () => {
     let users = [];
