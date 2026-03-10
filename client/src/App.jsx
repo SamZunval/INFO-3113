@@ -3,8 +3,15 @@ import { useState } from "react";
 import {
   Snackbar
 } from "@mui/material";
+
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 import Home from "./components/Home.jsx";
 import Bookmark from "./components/Bookmark";
+import Login from "./components/Login.jsx"; 
+import Register from './components/SignIn.jsx';
+
+
 import "./App.css";
 
 import Header from "./components/Header.jsx";
@@ -34,14 +41,25 @@ const theme = createTheme({
 });
   
   return (<ThemeProvider theme={theme}>
-    <Header appTitle="P1 c_tidy" log={openSnackbar} />
-    <Snackbar
-    sx={{zIndex: 99}}
-      open={snackbarVisible}
-      autoHideDuration={5000}
-      onClose={closeSnackbar}
-      message={snackbarMessage}
-    />
+    
+    <BrowserRouter>
+      <Header appTitle="Cupid Community" log={openSnackbar} />
+    
+      <Routes>
+        <Route path="/" element={<Home log={openSnackbar} />} />
+        < Route path="/login" element={<Login />} />
+        <Route path="/signin" element={<Register />} />
+      </Routes>
+
+      <Snackbar
+        sx={{zIndex: 99}}
+        open={snackbarVisible}
+        autoHideDuration={5000}
+        onClose={closeSnackbar}
+        message={snackbarMessage}
+      />
+    </BrowserRouter>
+    
   </ThemeProvider>);
 };
 
