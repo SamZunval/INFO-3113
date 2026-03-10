@@ -7,9 +7,10 @@ import {
 } from '@mui/material';
 
 import * as api from "../util/api"
-import logo from "../assets/earth.png";
+import logo from "../assets/Cupid_Community.png";
 import Search from "./Search";
 import Alert from "./Alert";
+import Login from "./Login";
 
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder'; // Border - Unbookmarked status (default)
 import BookmarkIcon from '@mui/icons-material/Bookmark';
@@ -18,6 +19,12 @@ const Home = (props) => {
     
     const [alerts, setAlerts] = useState([]);
     const [bookmarked, setBookmarked] = useState();
+    const [selectedAlert, setSelectedAlert] = useState();
+
+    const handleJoinRoom = (data) => {
+        props.log(`${data.userName} joined the room`);
+    };
+
     useEffect(() => {
         const loadAlerts = async () => {
             let result = await api.alerts.getSearchData();
@@ -45,7 +52,7 @@ const Home = (props) => {
           props.log(e.message);
         }
     }
-    const [selectedAlert, setSelectedAlert] = useState();
+    
     useEffect(() => {
         let checkBookmark = async () =>{
         if(selectedAlert != null) {
@@ -64,31 +71,18 @@ const Home = (props) => {
         checkBookmark(); 
     }, [selectedAlert]);
     
-    return (<>
-        <Paper elevation={4} sx={{ marginTop: "0.5em" }}>
-            <img src={logo} style={{ width: "40%", maxWidth: "200px", margin: "1em" }} />
-            <CardHeader title="Travel Alerts" />
-            <CardContent>
-                <Search alerts={alerts} onSelection={async (result) => {
-                    if(result == null){
-                        setSelectedAlert(result)
-                    }
-                    else{
-                        setSelectedAlert(await api.alerts.getCountryData(result.country_code));
-                    }
-                    
-            }} />
-            </CardContent>
-        </Paper>
-        <Alert alert={selectedAlert} />
-        {selectedAlert != null &&
-        <Fab color="primary" aria-label="bookmark" sx={{ zIndex: 100, border: "2px solid #e1e1e1", position: "absolute", bottom: "1em", right: "1em" }}onClick={bookmark}>
-            {
-                bookmarked
-            }
-        </Fab>
-        }
-    </>);
+    return (
+        <>
+            <Paper elevation={4} sx={{ marginTop: "0.5em", paddingBottom: "1em" }}>
+                <img src={logo} alt="Cupid Community Logo" style={{ width: "40%", maxWidth: "200px", margin: "1em" }} />
+                
+                <Login joinRoom={handleJoinRoom} error={null} />
+
+            </Paper>
+            
+          
+        </>
+    );
 };
 
 export default Home;

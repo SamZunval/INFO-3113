@@ -11,6 +11,8 @@ import {
 
 } from "@mui/material";
 
+import { useNavigate } from "react-router-dom";
+
 import MenuIcon from "@mui/icons-material/Menu";
 
 
@@ -18,6 +20,8 @@ import MenuIcon from "@mui/icons-material/Menu";
 const Header = (props) => {
 
  const [anchor, setAnchor] = useState(null);
+
+ const navigate = useNavigate();
 
  return (<>
   
@@ -27,7 +31,8 @@ const Header = (props) => {
           {props.appTitle}
         </Typography>
         <div style={{ flex: 1 }} />
-        <Button style={{ color: "#fffefe" }}>Login</Button>
+        <Button style={{ color: "#fffefe" }} onClick={() => navigate("/login")} >Login</Button>
+        <Button style={{ color: "#fffefe" }} onClick={() => navigate("/signin")} >Sign In </Button>
         <IconButton style={{ color: "#fffefe" }} onClick={e => setAnchor(e.target)}>
         <MenuIcon />
         </IconButton>
