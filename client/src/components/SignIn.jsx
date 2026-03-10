@@ -10,13 +10,13 @@ import {
 
 import logo from "../assets/Ducky.png";
 
-const Register = (props) =>{
+const Register = () =>{
     
     const [registerData, setRegisterData] = useState({
         userName: "",
         email: "",
         password: "",
-        adress: "",
+        address: "",
         province: "",
         city: "",
         birthDay: "",
@@ -37,6 +37,7 @@ const Register = (props) =>{
             setError("");
         } catch (err) {
             setError("Something went wrong with registration.");
+            console.error("Registration error:", err);
         }
     };
 
@@ -57,8 +58,8 @@ const Register = (props) =>{
                 <TextField fullWidth label="Birthday" name="birthDay" type="birthDay"
                     value={registerData.birthDay} onChange={handleChange} sx={{ mb: "1em" }} />
 
-                 <TextField fullWidth label="Adress" name="adress" type="adress"
-                    value={registerData.adress} onChange={handleChange} sx={{ mb: "1em" }} />
+                 <TextField fullWidth label="Address" name="address" type="address"
+                    value={registerData.address} onChange={handleChange} sx={{ mb: "1em" }} />
 
                 <TextField fullWidth label="Province" name="province" type="province"
                     value={registerData.province} onChange={handleChange} sx={{ mb: "1em" }} />
@@ -67,7 +68,7 @@ const Register = (props) =>{
                     value={registerData.city} onChange={handleChange} sx={{ mb: "1em" }} />
                 
                 <TextField fullWidth label="Postal Code" name="postalCode" type="postalCode"
-                    value={registerData.city} onChange={handleChange} sx={{ mb: "1em" }} />
+                    value={registerData.postalCode} onChange={handleChange} sx={{ mb: "1em" }} />
                 
                 <Button fullWidth variant="contained" 
                     disabled={!registerData.password || !registerData.userName || !registerData.email}
