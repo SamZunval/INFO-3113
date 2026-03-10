@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 
 
-import logo from "../assets/Cupid_Community.png";
+import logo from "../assets/Ducky.png";
 
 const Login = (props) => {
 

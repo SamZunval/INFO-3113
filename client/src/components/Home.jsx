@@ -7,7 +7,7 @@ import {
 } from '@mui/material';
 
 import * as api from "../util/api"
-import logo from "../assets/Cupid_Community.png";
+import logo from "../assets/Ducky.png";
 import Search from "./Search";
 import Alert from "./Alert";
 import Login from "./Login";
@@ -75,8 +75,6 @@ const Home = (props) => {
         <>
             <Paper elevation={4} sx={{ marginTop: "0.5em", paddingBottom: "1em" }}>
                 <img src={logo} alt="Cupid Community Logo" style={{ width: "40%", maxWidth: "200px", margin: "1em" }} />
-                
-                <Login joinRoom={handleJoinRoom} error={null} />
 
             </Paper>
             
