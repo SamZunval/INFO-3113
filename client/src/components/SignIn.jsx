@@ -7,7 +7,7 @@ import {
     Button,
     Alert
 } from "@mui/material";
-
+import * as api from "..util/api"
 import logo from "../assets/Ducky.png";
 
 const Register = () =>{
@@ -32,8 +32,7 @@ const Register = () =>{
     const handleRegister = async () => {
         try {
             console.log("Submitting registration:", registerData);
-            // This is where you will later add your fetch() to the database
-            // For now, it will just clear the error and log to console
+            api.users.postUser(registerData);
             setError("");
         } catch (err) {
             setError("Something went wrong with registration.");
