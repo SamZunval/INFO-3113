@@ -21,7 +21,7 @@ const users = {
         let data = await response.json();
         return data;
     },
-    getCountryData: async (user_id) => {
+    getUser: async (user_id) => {
         let response = await fetch(serverRoute("users/"+user_id), {
             headers,
             method: 'GET'
