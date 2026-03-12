@@ -7,7 +7,6 @@ import {
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Home from "./components/Home.jsx";
-import Bookmark from "./components/Bookmark";
 import Login from "./components/Login.jsx"; 
 import Register from './components/SignIn.jsx';
 
