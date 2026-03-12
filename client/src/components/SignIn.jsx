@@ -7,10 +7,14 @@ import {
     Button,
     Alert
 } from "@mui/material";
-import * as api from "..util/api"
+import { useNavigate } from 'react-router-dom'; //
+
+
+import * as api from "../util/api"
 import logo from "../assets/Ducky.png";
 
-const Register = () =>{
+const Register = () => {
+    const navigate = useNavigate();
     
     const [registerData, setRegisterData] = useState({
         userName: "",
@@ -34,6 +38,9 @@ const Register = () =>{
             console.log("Submitting registration:", registerData);
             api.users.postUser(registerData);
             setError("");
+            localStorage.setItem("userName", registerData.userName);
+            navigate('/login');
+
         } catch (err) {
             setError("Something went wrong with registration.");
             console.error("Registration error:", err);

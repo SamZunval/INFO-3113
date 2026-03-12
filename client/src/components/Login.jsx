@@ -12,11 +12,11 @@ import {
 import logo from "../assets/Ducky.png";
 
 const Login = (props) => {
-
-    
-    const [userName, setUserName] = useState("");
+    const [userName, setUserName] = useState(localStorage.getItem("userName") || "");
+console.log("Login component initialized with userName:", userName);
     const [password, setPassword] = useState("");
-
+   
+    
     return (
         <Paper elevation={4} sx={{ mt: "0.5em" }}>
             <CardContent>
