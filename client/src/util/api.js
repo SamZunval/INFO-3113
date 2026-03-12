@@ -12,76 +12,106 @@ const headers = {
 
 const serverRoute = (route) => `${API_IP}:${API_PORT}/${route}`;
 
-const alerts = {
-    getSearchData: async () => {
-        let response = await fetch(serverRoute("alerts"), {
+const users = {
+    getUsers: async () => {
+        let response = await fetch(serverRoute("users"), {
             headers,
             method: 'GET'
         });
         let data = await response.json();
         return data;
     },
-    getCountryData: async (country_code) => {
-        let response = await fetch(serverRoute("alerts/"+country_code), {
+    getCountryData: async (user_id) => {
+        let response = await fetch(serverRoute("users/"+user_id), {
             headers,
             method: 'GET'
         });
         let data = await response.json();
         return data[0];
-    }
+    },
+    postUser: async (user) => {
+        let response = await fetch(serverRoute("db/adduser"), {
+            headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            json: true, 
+            body: JSON.stringify(user),
+        });
+        return response;
+    },
+    removeUser: async (user) => {
+        let response = await fetch(serverRoute("db/removeuser"), {
+            headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            json: true, 
+            body: JSON.stringify(user),
+        });
+        return response;
+    },
+    updateUser: async (user) => {
+        let response = await fetch(serverRoute("db/updateuser"), {
+            headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            json: true, 
+            body: JSON.stringify(user),
+        });
+        return response;
+    },
 }
 
-const util = {
-    refreshDatabase: async () => {
-        let response = await fetch(serverRoute("db/refresh"), {
-            headers,
-            method: 'POST'
-        });
-        return response;
-    },
-    postBookmark: async (country) => {
-        let response = await fetch(serverRoute("db/bookmark"), {
+const images = {
+    postImage: async (image) => {
+        let response = await fetch(serverRoute("db/addimage"), {
             headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
             },
             method: 'POST',
             json: true, 
-            body: JSON.stringify(country),
+            body: JSON.stringify(image),
         });
         return response;
     },
-    removeBookmark: async (country) => {
-        let response = await fetch(serverRoute("db/removebookmark"), {
+    removeImage: async (image_id) => {
+        let response = await fetch(serverRoute("db/removeimage/"+image_id), {
             headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
             },
             method: 'POST',
             json: true, 
-            body: JSON.stringify(country),
+            body: JSON.stringify(image_id),
         });
-        return response;
+        let data = await response.json();
+        return data[0];
     },
-    getBookmarks: async () => {
-        let response = await fetch(serverRoute("bookmarks"), {
+    getImages: async (user_id) => {
+        let response = await fetch(serverRoute("images/" + user_id), {
             headers,
             method: 'GET'
         });
         let data = await response.json();
         return data;
     },
-    getBookmark: async (country_code) => {
-        let response = await fetch(serverRoute("bookmarks/"+country_code), {
+    getImage: async (image_id) => {
+        let response = await fetch(serverRoute("image/" + image_id), {
             headers,
             method: 'GET'
         });
         let data = await response.json();
-        return data[0];
-    }
+        return data;
+    },
 }
 
 export {
-    util,
-    alerts,
+    users,
+    images
 }
