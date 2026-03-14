@@ -22,6 +22,11 @@ const Header = (props) => {
 
  const [anchor, setAnchor] = useState(null);
 
+ const handleMenuClick = (path) => {
+  navigate(path);
+  setAnchor(null); 
+};
+
  const navigate = useNavigate();
 
  return (<>
@@ -41,7 +46,7 @@ const Header = (props) => {
         PaperProps={{sx: {backgroundColor: "#f680dc", color: "#fffefe",minWidth: "250px"},
         }}
          >
-          <MenuItem>Profile</MenuItem>
+          <MenuItem onClick={() => handleMenuClick("/Profile")}>Profile</MenuItem>
           <MenuItem>Date</MenuItem>
           <MenuItem>Love</MenuItem>
           <MenuItem>Member Renew/Become</MenuItem>
