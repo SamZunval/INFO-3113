@@ -52,7 +52,7 @@ const theme = createTheme({
         <Route path="/signin" element={<Register />} />
         <Route path="/profile" element={<Profile />} />
       </Routes>
-       <div className="background"></div>
+       <div className="background"> </div>
 
       <Snackbar
         sx={{zIndex: 99}}
