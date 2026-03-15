@@ -7,6 +7,7 @@ import {  retrieveUsers,
     removeUser,
     updateUser,
     addImage,
+    addSkills,
     removeImage,
     retrieveImages,
     retrieveImage} from './data.js';
@@ -102,6 +103,17 @@ app.get('/image/:what', async (_request, response) => {
     const image_id = _request.params.what;
     let images = await retrieveImage(image_id);
     response.json(images);
+});
+//Updating the skills of a user 
+app.post('/db/addskills', async (_request, response) => {
+    try {
+        await addSkills(_request.body);
+        response.sendStatus(200);
+    }
+    catch (e) {
+        console.error(e);
+        response.sendStatus(500);
+    }
 });
 /*
 app.get('/bookmark', function (req, res) {//handles routing for the client

@@ -169,6 +169,47 @@ const retrieveImage = async (data) => {
 
     return image;
 }
+const addSkills = async (data) => {
+
+    let context = undefined;
+
+    try {
+
+        context = await db.initDatabase(env.DB_URI);
+
+        const user_id = data._id;
+        const skills = data.skills;
+
+        // find existing user
+        let user = await db.findDocument(
+            context,
+            DATABASE_NAME,
+            USER_COLLECTION,
+            { _id: user_id },
+            {}
+        );
+
+        // add skills field
+        user.skills = skills;
+
+        // replace updated document
+        await db.replaceDocument(
+            context,
+            DATABASE_NAME,
+            USER_COLLECTION,
+            { _id: user_id },
+            user
+        );
+
+    }
+    catch (e) {
+        console.error(e);
+    }
+    finally {
+        context?.close();
+    }
+};
+
 export {
     DATABASE_NAME,
     IMAGE_COLLECTION,
@@ -176,10 +217,11 @@ export {
     retrieveUsers,
     retrieveUser,
     addUser,
+    addSkills,
     removeUser,
     updateUser,
     addImage,
     removeImage,
     retrieveImages,
-    retrieveImage
+    retrieveImage,addSkills
 };
