@@ -17,6 +17,9 @@ const Profile = () => {
   const [career, setCareer] = useState("");
   const [college, setCollege] = useState("");
 
+
+  const isLoggedIn = !!localStorage.getItem("userID");
+  
   const handleSave = (e) => {
     
   };
@@ -48,7 +51,8 @@ const Profile = () => {
                 onChange={(e) => setLastName(e.target.value)} 
               />
             </Box>
-
+          {isLoggedIn && (
+            <>
             <TextField 
               label="Email" 
               value={email} 
@@ -72,6 +76,14 @@ const Profile = () => {
               value={college} 
               onChange={(e) => setCollege(e.target.value)} 
             />
+            </>
+          )}
+
+          {!isLoggedIn && (
+            <Typography sx={{ color: "gray", textAlign: "center" }}>
+              Please log in to view contact information.
+            </Typography>
+          )}
 
             <Button fullWidth variant="contained" 
                     sx={{ backgroundColor: "#f680dc", "&:hover": { backgroundColor: "#d46bb8" } }} >
