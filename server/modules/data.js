@@ -45,6 +45,51 @@ const retrieveUser = async (user_id) => {
 
     return users;
 }
+const likeUser = async (user_id, user2_id) => {
+    let users = [];
+
+    let context = undefined;
+    try {
+        // Initialize the database
+        context = await db.initDatabase(env.DB_URI);
+
+        //add like in both entries
+        users = await db.updateDocument(context, DATABASE_NAME, USER_COLLECTION, {_id : user_id}, {likes: user2_id});
+        users = await db.updateDocument(context, DATABASE_NAME, USER_COLLECTION, {_id : user2_id}, {liked: user_id});
+    }
+    catch (e) {
+        console.error(e);
+    }
+    finally {
+        context?.close();
+    }
+
+    return users;
+}
+const loginUser = async (username, password) => {
+    let user = {};
+    let loggedIn = {};
+
+    let context = undefined;
+    try {
+        // Initialize the database
+        context = await db.initDatabase(env.DB_URI);
+
+        //add like in both entries
+        user = await db.findDocument(context, DATABASE_NAME, USER_COLLECTION, {userName : username}, {});
+        if(password == user.password){
+            loggedIn = user;
+        }
+    }
+    catch (e) {
+        console.error(e);
+    }
+    finally {
+        context?.close();
+    }
+
+    return loggedIn;
+}
 const addUser = async (user) => {
 
     let context = undefined;
@@ -181,5 +226,7 @@ export {
     addImage,
     removeImage,
     retrieveImages,
-    retrieveImage
+    retrieveImage,
+    likeUser,
+    loginUser
 };

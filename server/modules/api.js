@@ -41,6 +41,30 @@ app.get('/users/:what', async (_request, response) => {
     let users = await retrieveUser(user_id);
     response.json(users);
 });
+app.get('/users/login/:username-:password', async (_request, response) => {
+    try {
+        const username_id = _request.params.username;
+        const password_id = _request.params.password;
+        await loginUser(username_id,password_id);
+        response.sendStatus(200);
+    }
+    catch (e) {
+        console.error(e);
+        response.sendStatus(500);
+    }
+});
+app.post('/users/like/:liker-:liked', async (_request, response) => {
+    try {
+        const liker_id = _request.params.liker;
+        const liked_id = _request.params.liked;
+        await likeUser(liker_id,liked_id);
+        response.sendStatus(200);
+    }
+    catch (e) {
+        console.error(e);
+        response.sendStatus(500);
+    }
+});
 app.post('/db/adduser', async (_request, response) => {
     try {
         await addUser(_request.body);
