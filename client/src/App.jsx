@@ -8,7 +8,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Home from "./components/Home.jsx";
 import Login from "./components/Login.jsx"; 
-import Register from './components/SignIn.jsx';
+import Register from './components/SignUp.jsx';
 import Profile from './components/Profile.jsx'
 
 
@@ -49,7 +49,7 @@ const theme = createTheme({
       <Routes>
         <Route path="/" element={<Home log={openSnackbar} />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/signin" element={<Register />} />
+        <Route path="/signup" element={<Register />} />
         <Route path="/profile" element={<Profile />} />
       </Routes>
        <div className="background"> </div>
