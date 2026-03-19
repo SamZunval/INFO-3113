@@ -9,7 +9,9 @@ import {  retrieveUsers,
     addImage,
     removeImage,
     retrieveImages,
-    retrieveImage} from './data.js';
+    retrieveImage,
+    likeUser,
+    loginUser} from './data.js';
 
 // The Express application object
 const app = express();
@@ -45,7 +47,8 @@ app.get('/users/login/:username-:password', async (_request, response) => {
     try {
         const username_id = _request.params.username;
         const password_id = _request.params.password;
-        await loginUser(username_id,password_id);
+        let users = await loginUser(username_id,password_id);
+        response.json(users);
         response.sendStatus(200);
     }
     catch (e) {
