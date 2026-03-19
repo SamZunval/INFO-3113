@@ -8,7 +8,8 @@ import {
     Alert
 } from "@mui/material";
 
-//import * as api from "../util/api"
+import * as api from "../util/api"
+
 import logo from "../assets/Ducky.png";
 import { useNavigate } from 'react-router-dom'; 
 
@@ -18,16 +19,21 @@ const Login = (props) => {
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
 
-    console.log("Login component initialized with userName:", userName);
 
      const handleLogin = async () => {
             try {
-                //api.users.postUser(,password);
-                sessionStorage.setItem("userId", userName);
+                var loggedInUser = await api.users.loginUser( userName, password );
+                if (!loggedInUser || Object.keys(loggedInUser).length === 0) {
+                    alert("Invalid username or password. Please try again.");
+                    console.log("Login failed for user:", userName);
+                    return;
+                }
+                sessionStorage.setItem("userInfo", JSON.stringify(loggedInUser));
+
                 navigate('/profile');
     
             } catch (err) {
-                console.error("Registration error:", err);
+                console.error("Login error:", err);
             }
         };
 
