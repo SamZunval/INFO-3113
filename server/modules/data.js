@@ -98,13 +98,18 @@ const addUser = async (user) => {
         context = await db.initDatabase(env.DB_URI);
 
         let found = await db.findDocument(context, DATABASE_NAME, USER_COLLECTION, {userName : user.userName}, {});
-        if(found != {}){
+        if(!found || found != {} || found != [] || Object.keys(found).length != 0){
             let result = await db.insertDocument(context, DATABASE_NAME, USER_COLLECTION, user);
+            return true;
+        }
+        else {
+            return false;
         }
         //console.log(`${result.insertedCount} user loaded into ${USER_COLLECTION}`);
     }
     catch (e) {
         console.error(e);
+        return false;
     }
     finally {
         context?.close();
