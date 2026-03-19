@@ -97,7 +97,10 @@ const addUser = async (user) => {
         // Initialize the database
         context = await db.initDatabase(env.DB_URI);
 
-        let result = await db.insertDocument(context, DATABASE_NAME, USER_COLLECTION, user);
+        let found = await db.findDocument(context, DATABASE_NAME, USER_COLLECTION, {userName : user.userName}, {});
+        if(found != {}){
+            let result = await db.insertDocument(context, DATABASE_NAME, USER_COLLECTION, user);
+        }
         //console.log(`${result.insertedCount} user loaded into ${USER_COLLECTION}`);
     }
     catch (e) {
