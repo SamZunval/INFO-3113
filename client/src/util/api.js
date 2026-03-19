@@ -29,6 +29,24 @@ const users = {
         let data = await response.json();
         return data[0];
     },
+    loginUser: async (username, password) => {
+        let response = await fetch(serverRoute("users/login/"+username+"-"+password), {
+            headers,
+            method: 'GET'
+        });
+        let data = await response.json();
+        return data;
+    },
+    likeUser: async (user_id, user2_id) => {
+        let response = await fetch(serverRoute("users/like/:" + user_id + "-" +user2_id), {
+            headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+            },
+            method: 'POST',
+        });
+        return response;
+    }, 
     postUser: async (user) => {
         let response = await fetch(serverRoute("db/adduser"), {
             headers: {
