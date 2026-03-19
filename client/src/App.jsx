@@ -40,7 +40,6 @@ const theme = createTheme({
  
 });
   
-  
   return (<ThemeProvider theme={theme}>
     
     <BrowserRouter>
@@ -51,8 +50,9 @@ const theme = createTheme({
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Register />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/Date" element={<Date />} />
       </Routes>
-       <div className="background"> </div>
+       <div className="background"></div>
 
       <Snackbar
         sx={{zIndex: 99}}
