@@ -8,15 +8,29 @@ import {
     Alert
 } from "@mui/material";
 
-
+//import * as api from "../util/api"
 import logo from "../assets/Ducky.png";
+import { useNavigate } from 'react-router-dom'; 
 
 const Login = (props) => {
-    const [userName, setUserName] = useState(localStorage.getItem("userName") || "");
-console.log("Login component initialized with userName:", userName);
+
+    const [userName, setUserName] = useState(sessionStorage.getItem("userName") || "");
     const [password, setPassword] = useState("");
-   
+    const navigate = useNavigate();
+
+    console.log("Login component initialized with userName:", userName);
+
+     const handleLogin = async () => {
+            try {
+                //api.users.postUser(,password);
+                sessionStorage.setItem("userId", userName);
+                navigate('/profile');
     
+            } catch (err) {
+                console.error("Registration error:", err);
+            }
+        };
+
     return (
         <Paper elevation={4} sx={{ mt: "0.5em" }}>
             <CardContent>
@@ -27,7 +41,7 @@ console.log("Login component initialized with userName:", userName);
                 <TextField fullWidth label="Password" value={password} type="password" onChange={(e) => setPassword(e.target.value)} sx={{ mb: "1em" }}
                 />
                 <Button fullWidth variant="contained" disabled={!password || !userName}
-                    onClick={() => props.joinRoom({ password, userName })}
+                    onClick={handleLogin}
                 >
                     Login
                 </Button>

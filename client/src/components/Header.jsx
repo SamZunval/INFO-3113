@@ -38,7 +38,7 @@ const Header = (props) => {
         </Typography>
         <div style={{ flex: 1 }} />
         <Button style={{ color: "#fffefe" }} onClick={() => navigate("/login")} >Login</Button>
-        <Button style={{ color: "#fffefe" }} onClick={() => navigate("/signin")} >Sign In </Button>
+        <Button style={{ color: "#fffefe" }} onClick={() => navigate("/signup")} >Sign Up </Button>
         <IconButton style={{ color: "#fffefe" }} onClick={e => setAnchor(e.target)}>
         <MenuIcon />
         </IconButton>
