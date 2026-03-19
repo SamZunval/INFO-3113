@@ -49,7 +49,6 @@ app.get('/users/login/:username-:password', async (_request, response) => {
         const password_id = _request.params.password;
         let users = await loginUser(username_id,password_id);
         response.json(users);
-        response.sendStatus(200);
     }
     catch (e) {
         console.error(e);

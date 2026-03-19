@@ -77,7 +77,7 @@ const loginUser = async (username, password) => {
 
         //add like in both entries
         user = await db.findDocument(context, DATABASE_NAME, USER_COLLECTION, {userName : username}, {});
-        if(password == user.password){
+        if(!user || user != {} || user != [] || Object.keys(user).length != 0|| password == user.password){
             loggedIn = user;
         }
     }
