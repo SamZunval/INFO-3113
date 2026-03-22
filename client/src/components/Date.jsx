@@ -1,6 +1,12 @@
 import React, { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 function MapEx3() {
+  const navigate = useNavigate();
+
+const handleMenuClick = (path) => {
+  navigate(path);
+}
   const mapRef = useRef(null);
   const [address, setAddress] = useState("");
   const [showMap, setShowMap] = useState(false);
@@ -95,26 +101,24 @@ function MapEx3() {
       )}
 
   <div>
-     <button
-      onClick={genMap}
-      style={{
-        position: "fixed",      
-        bottom: "5px",          
-        right: "40px",          
-        width: "10vw",
-        minWidth: "140px", 
-        height: "8vh",
-        backgroundColor: "#a1357d",
-        color: "#ffffff", 
-         borderRadius: "8px",
-        fontSize: "1rem",
-
-      }}
-    
-    >
-      Complete a survey
-    </button>
-        </div>
+  <button
+    onClick={() => handleMenuClick("/DatingSurvey")}
+    style={{
+      position: "fixed",
+      bottom: "5px",
+      right: "40px",
+      width: "10vw",
+      minWidth: "140px",
+      height: "8vh",
+      backgroundColor: "#a1357d",
+      color: "#ffffff",
+      borderRadius: "8px",
+      fontSize: "1rem",
+    }}
+  >
+    Complete a survey
+  </button>
+</div>
 
       {status && <div style={{ color: "red" }}>Error: {status}</div>}
     </div>
