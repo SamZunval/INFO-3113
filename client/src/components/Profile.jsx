@@ -17,9 +17,6 @@ const Profile = () => {
   const [career, setCareer] = useState("");
   const [college, setCollege] = useState("");
 
-  const handleSave = (e) => {
-    
-  };
 
   return (
     <Box>

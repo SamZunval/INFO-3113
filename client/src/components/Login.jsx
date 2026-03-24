@@ -15,17 +15,17 @@ import { useNavigate } from 'react-router-dom';
 
 const Login = (props) => {
 
-    const [userName, setUserName] = useState(sessionStorage.getItem("userName") || "");
+    const [email, setEmail] = useState(sessionStorage.getItem("email") || "");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
 
 
      const handleLogin = async () => {
             try {
-                var loggedInUser = await api.users.loginUser( userName, password );
+                var loggedInUser = await api.users.loginUser( email, password );
                 if (!loggedInUser || Object.keys(loggedInUser).length === 0) {
-                    alert("Invalid username or password. Please try again.");
-                    console.log("Login failed for user:", userName);
+                    alert("Invalid email or password. Please try again.");
+                    console.log("Login failed for user:", email);
                     return;
                 }
                 sessionStorage.setItem("userInfo", JSON.stringify(loggedInUser));
@@ -40,13 +40,13 @@ const Login = (props) => {
     return (
         <Paper elevation={4} sx={{ mt: "0.5em" }}>
             <CardContent>
-                <img src={logo} alt="Cupid Community Logo" style={{ width: "40%", maxWidth: "200px", margin: "1em" }} />
+                <img src={logo} alt="Cupid Community Logo" style={{ width: "40%", maxWidth: "200px", margin: "0" ,padding: "0" }} />
                 <CardHeader title="Login your Account" sx={{ color: "#f680dc" }}/>
-                <TextField fullWidth label="User Name" value={userName} onChange={(e) => setUserName(e.target.value)} sx={{ mb: "1em" }}
+                <TextField fullWidth label="Email" value={email} onChange={(e) => setEmail(e.target.value)} sx={{ mb: "1em" }}
                 />
                 <TextField fullWidth label="Password" value={password} type="password" onChange={(e) => setPassword(e.target.value)} sx={{ mb: "1em" }}
                 />
-                <Button fullWidth variant="contained" disabled={!password || !userName}
+                <Button fullWidth variant="contained" disabled={!password || !email}
                     onClick={handleLogin}
                 >
                     Login

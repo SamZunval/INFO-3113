@@ -8,8 +8,6 @@ import {
     Alert
 } from "@mui/material";
 import { useNavigate } from 'react-router-dom'; //
-
-
 import * as api from "../util/api"
 import logo from "../assets/Ducky.png";
 
@@ -17,7 +15,8 @@ const Register = () => {
     const navigate = useNavigate();
     
     const [registerData, setRegisterData] = useState({
-        userName: "",
+        firstName: "",
+        lastName: "",
         email: "",
         password: "",
         address: "",
@@ -77,13 +76,16 @@ const Register = () => {
         }
     };
 
+
     return (
         <Paper elevation={4} sx={{ mt: "0.5em" }}>
             <CardContent>
-                 <img src={logo} alt="Cupid Community Logo" style={{ width: "40%", maxWidth: "200px", margin: "1em" }} />
+                 <img src={logo} alt="Cupid Community Logo" style={{ width: "40%", maxWidth: "200px", margin: "0" ,padding: "0" }} />
                 <CardHeader title="Create an Account" sx={{ color: "#f680dc" }} />
-                <TextField fullWidth label="User Name" name="userName" 
-                    value={registerData.userName} onChange={handleChange} required sx={{ mb: "1em" }} />
+                <TextField fullWidth label="First Name" name="firstName" 
+                    value={registerData.firstName} onChange={handleChange} required sx={{ mb: "1em", width: "50%" }} />
+                <TextField fullWidth label="Last Name" name="lastName" 
+                value={registerData.lastName} onChange={handleChange} required sx={{ mb: "1em", width: "50%" }} />
                 
                 <TextField fullWidth label="Email" name="email" type="email"
                     value={registerData.email} onChange={handleChange} required sx={{ mb: "1em" }} onBlur={validateEmail}/>
@@ -97,7 +99,7 @@ const Register = () => {
                  <TextField fullWidth label="Address" name="address" type="address"
                     value={registerData.address} onChange={handleChange} sx={{ mb: "1em" }} />
 
-                <TextField fullWidth label="Province" name="province" type="province"
+               <TextField fullWidth label="Province" name="province" type="province"
                     value={registerData.province} onChange={handleChange} sx={{ mb: "1em" }} />
                 
                 <TextField fullWidth label="City" name="city" type="city"
@@ -107,7 +109,7 @@ const Register = () => {
                     value={registerData.postalCode} onChange={handleChange} sx={{ mb: "1em" }} onBlur={validatePostalCode}/>
                 
                 <Button fullWidth variant="contained" 
-                    disabled={!registerData.password || !registerData.userName || !registerData.email || !isEmailValid || !isPostalCodeValid}
+                    disabled={!registerData.password || !registerData.userName || !registerData.email || !isEmailValid ||!isPostalCodeValid}
                     onClick={handleRegister}
                     sx={{ backgroundColor: "#f680dc", "&:hover": { backgroundColor: "#d46bb8" } }}
                 >
