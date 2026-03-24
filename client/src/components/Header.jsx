@@ -23,6 +23,11 @@ const Header = (props) => {
  const [anchor, setAnchor] = useState(null);
 
  const handleMenuClick = (path) => {
+  if (!sessionStorage.getItem("userInfo")) {
+    alert("Please log in to access this page.");
+    setAnchor(null);
+    return;
+  }
   navigate(path);
   setAnchor(null); 
 };

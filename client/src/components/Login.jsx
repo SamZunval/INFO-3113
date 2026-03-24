@@ -40,9 +40,9 @@ const Login = (props) => {
     return (
         <Paper elevation={4} sx={{ mt: "0.5em" }}>
             <CardContent>
-                <img src={logo} alt="Cupid Community Logo" style={{ width: "40%", maxWidth: "200px", margin: "1em" }} />
+                <img src={logo} alt="Cupid Community Logo" style={{ width: "40%", maxWidth: "200px", margin: "0" ,padding: "0" }} />
                 <CardHeader title="Login your Account" sx={{ color: "#f680dc" }}/>
-                <TextField fullWidth label="User Name" value={userName} onChange={(e) => setUserName(e.target.value)} sx={{ mb: "1em" }}
+                <TextField fullWidth label="Username" value={userName} onChange={(e) => setUserName(e.target.value)} sx={{ mb: "1em" }}
                 />
                 <TextField fullWidth label="Password" value={password} type="password" onChange={(e) => setPassword(e.target.value)} sx={{ mb: "1em" }}
                 />
