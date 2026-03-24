@@ -8,9 +8,13 @@ import {
     Alert
 } from "@mui/material";
 import { useNavigate } from 'react-router-dom'; //
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6036a6a7478b73062e15dc7e70619f7df5fccdff
 import * as api from "../util/api"
 import logo from "../assets/Ducky.png";
-
+import DatePicker from "./DatePicker";
 const Register = () => {
     const navigate = useNavigate();
     
@@ -27,9 +31,13 @@ const Register = () => {
     });
 
     const [error, setError] = useState("");
+<<<<<<< HEAD
     const [isEmailValid, setEmail] = useState(false);
     const [isPostalCodeValid, setPostalCode] = useState(false);
 
+=======
+    const dateUpdated = (e) => { setRegisterData({ ...registerData, birthDay: e })}
+>>>>>>> 6036a6a7478b73062e15dc7e70619f7df5fccdff
     const handleChange = (e) => {
        setRegisterData({ ...registerData, [e.target.name]: e.target.value });
     };
@@ -93,8 +101,7 @@ const Register = () => {
                 <TextField fullWidth label="Password" name="password" type="password"
                     value={registerData.password} onChange={handleChange} required sx={{ mb: "1em" }} />
                 
-                <TextField fullWidth label="Birthday" name="birthDay" type="birthDay"
-                    value={registerData.birthDay} onChange={handleChange} sx={{ mb: "1em" }} />
+                <DatePicker accept={dateUpdated}></DatePicker>
 
                  <TextField fullWidth label="Address" name="address" type="address"
                     value={registerData.address} onChange={handleChange} sx={{ mb: "1em" }} />
