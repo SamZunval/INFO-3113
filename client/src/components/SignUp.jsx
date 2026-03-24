@@ -9,10 +9,9 @@ import {
 } from "@mui/material";
 import { useNavigate } from 'react-router-dom'; //
 
-
 import * as api from "../util/api"
 import logo from "../assets/Ducky.png";
-
+import DatePicker from "./DatePicker";
 const Register = () => {
     const navigate = useNavigate();
     
@@ -28,7 +27,7 @@ const Register = () => {
     });
 
     const [error, setError] = useState("");
-
+    const dateUpdated = (e) => { setRegisterData({ ...registerData, birthDay: e })}
     const handleChange = (e) => {
        setRegisterData({ ...registerData, [e.target.name]: e.target.value });
     };
@@ -61,8 +60,7 @@ const Register = () => {
                 <TextField fullWidth label="Password" name="password" type="password"
                     value={registerData.password} onChange={handleChange} sx={{ mb: "1em" }} />
                 
-                <TextField fullWidth label="Birthday" name="birthDay" type="birthDay"
-                    value={registerData.birthDay} onChange={handleChange} sx={{ mb: "1em" }} />
+                <DatePicker accept={dateUpdated}></DatePicker>
 
                  <TextField fullWidth label="Address" name="address" type="address"
                     value={registerData.address} onChange={handleChange} sx={{ mb: "1em" }} />
