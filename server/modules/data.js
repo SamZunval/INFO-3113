@@ -66,7 +66,7 @@ const likeUser = async (user_id, user2_id) => {
 
     return users;
 }
-const loginUser = async (email, password) => {
+const loginUser = async (userName, password) => {
     let user = {};
     let loggedIn = {};
 
@@ -76,7 +76,7 @@ const loginUser = async (email, password) => {
         context = await db.initDatabase(env.DB_URI);
 
         //add like in both entries
-        user = await db.findDocument(context, DATABASE_NAME, USER_COLLECTION, {email : email}, {});
+        user = await db.findDocument(context, DATABASE_NAME, USER_COLLECTION, {userName : userName}, {});
         if(!user || user != {} || user != [] || Object.keys(user).length != 0|| password == user.password){
             loggedIn = user;
         }
