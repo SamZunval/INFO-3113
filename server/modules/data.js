@@ -97,7 +97,7 @@ const addUser = async (user) => {
         // Initialize the database
         context = await db.initDatabase(env.DB_URI);
 
-        let found = await db.findDocument(context, DATABASE_NAME, USER_COLLECTION, {email : user.email}, {});
+        let found = await db.findDocument(context, DATABASE_NAME, USER_COLLECTION, {userName : user.userName}, {});
         if(!found || found != {} || found != [] || Object.keys(found).length != 0){
             let result = await db.insertDocument(context, DATABASE_NAME, USER_COLLECTION, user);
             return true;

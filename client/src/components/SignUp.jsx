@@ -8,10 +8,7 @@ import {
     Alert
 } from "@mui/material";
 import { useNavigate } from 'react-router-dom'; //
-<<<<<<< HEAD
-=======
 
->>>>>>> 6036a6a7478b73062e15dc7e70619f7df5fccdff
 import * as api from "../util/api"
 import logo from "../assets/Ducky.png";
 import DatePicker from "./DatePicker";
@@ -19,6 +16,7 @@ const Register = () => {
     const navigate = useNavigate();
     
     const [registerData, setRegisterData] = useState({
+        userName: "",
         firstName: "",
         lastName: "",
         email: "",
@@ -31,13 +29,10 @@ const Register = () => {
     });
 
     const [error, setError] = useState("");
-<<<<<<< HEAD
     const [isEmailValid, setEmail] = useState(false);
     const [isPostalCodeValid, setPostalCode] = useState(false);
 
-=======
     const dateUpdated = (e) => { setRegisterData({ ...registerData, birthDay: e })}
->>>>>>> 6036a6a7478b73062e15dc7e70619f7df5fccdff
     const handleChange = (e) => {
        setRegisterData({ ...registerData, [e.target.name]: e.target.value });
     };
@@ -65,18 +60,18 @@ const Register = () => {
     const handleRegister = async () => {
         try {
             console.log("Submitting registration:", registerData);
-            var response = api.users.postUser(registerData);
-	    if(response.statusCode == 200){
-		setError("");
+            var response = await api.users.postUser(registerData);
+            if(response.status == 200){
+                setError("");
                 sessionStorage.setItem("userName", registerData.userName);
                 navigate('/login');
-	    }
-            else if(response.statusCode == 400){
+            }
+            else if(response.status == 400){
                 setError("Registration failed, username already in use.");
             }
             else {
                 setError("Something went wrong with registration.");
-	    }            
+            }            
 
         } catch (err) {
             setError("Something went wrong with registration.");
@@ -90,8 +85,13 @@ const Register = () => {
             <CardContent>
                  <img src={logo} alt="Cupid Community Logo" style={{ width: "40%", maxWidth: "200px", margin: "0" ,padding: "0" }} />
                 <CardHeader title="Create an Account" sx={{ color: "#f680dc" }} />
+
+                 <TextField fullWidth label="Username" name="userName" 
+                    value={registerData.userName} onChange={handleChange} required sx={{ mb: "1em", width: "100%" }} />
+
                 <TextField fullWidth label="First Name" name="firstName" 
                     value={registerData.firstName} onChange={handleChange} required sx={{ mb: "1em", width: "50%" }} />
+
                 <TextField fullWidth label="Last Name" name="lastName" 
                 value={registerData.lastName} onChange={handleChange} required sx={{ mb: "1em", width: "50%" }} />
                 
@@ -116,7 +116,7 @@ const Register = () => {
                     value={registerData.postalCode} onChange={handleChange} sx={{ mb: "1em" }} onBlur={validatePostalCode}/>
                 
                 <Button fullWidth variant="contained" 
-                    disabled={!registerData.password || !registerData.userName || !registerData.email || !isEmailValid ||!isPostalCodeValid}
+                    disabled={!registerData.password ||!registerData.userName || !registerData.firstName || !registerData.lastName || !registerData.email || !isEmailValid ||!isPostalCodeValid}
                     onClick={handleRegister}
                     sx={{ backgroundColor: "#f680dc", "&:hover": { backgroundColor: "#d46bb8" } }}
                 >
