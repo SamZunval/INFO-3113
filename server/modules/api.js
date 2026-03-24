@@ -69,7 +69,8 @@ app.post('/users/like/:liker-:liked', async (_request, response) => {
 });
 app.post('/db/adduser', async (_request, response) => {
     try {
-        if(await addUser(_request.body)){
+        let good = await addUser(_request.body);
+        if(good){
             response.sendStatus(200);
         }
         else {
