@@ -14,23 +14,13 @@ import Date from './components/Date.jsx'
 import DatingSurvey from './components/DatingSurvey.jsx'
 import Matches from "./components/Matches.jsx";
 import { Navigate } from "react-router-dom";
-
+import Search from './components/Search.jsx';
+import Payment from './components/Payment.jsx';
 
 import "./App.css";
 
 import Header from "./components/Header.jsx";
 import { createTheme, ThemeProvider } from "@mui/material";
-
-  const isLoggedIn = !!sessionStorage.getItem("userName");
-  const ProtectedRoute = ({ isAllowed, children }) => {
-      if (!isAllowed) {
-          alert("Please log in to access this page.");
-          return <Navigate to="/signup" replace />;
-      }
-
-      return children;
-  };
-
 function App() {
 
   // Snackbar State & Functions
@@ -42,19 +32,19 @@ function App() {
     setSnackbarVisible(true);
   }
   
-  const theme = createTheme({
-    palette: {
-      primary: {
-        main: "#f680dc"
-      },
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#f680dc"
+    },
 
-    text:{
-      primary: "#3d0f3e"
-        }
-    }
-  
-  });
+  text:{
+    primary: "#3d0f3e"
+      }
+  }
  
+});
+
 
   return (<ThemeProvider theme={theme}>
     
@@ -66,6 +56,10 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Register />} />
         <Route path="/matches" element={<Matches />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/Date" element={<Date />} />
+        <Route path="/Search" element={<Search />} />
+        <Route path="/Payment" element={<Payment />} />
         <Route
             path="/profile"
             element={
