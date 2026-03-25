@@ -9,27 +9,14 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./components/Home.jsx";
 import Login from "./components/Login.jsx"; 
 import Register from './components/SignUp.jsx';
-import Profile from './components/Profile.jsx';
-import Date from './components/Date.jsx'
-import DatingSurvey from './components/DatingSurvey.jsx'
-import { Navigate } from "react-router-dom";
-
+import Profile from './components/Profile.jsx'
+import Search from './components/Search.jsx';
+import Payment from './components/Payment.jsx';
 
 import "./App.css";
 
 import Header from "./components/Header.jsx";
 import { createTheme, ThemeProvider } from "@mui/material";
-
-  const isLoggedIn = !!sessionStorage.getItem("userName");
-  const ProtectedRoute = ({ isAllowed, children }) => {
-      if (!isAllowed) {
-          alert("Please log in to access this page.");
-          return <Navigate to="/signup" replace />;
-      }
-
-      return children;
-  };
-
 function App() {
 
   // Snackbar State & Functions
@@ -41,19 +28,19 @@ function App() {
     setSnackbarVisible(true);
   }
   
-  const theme = createTheme({
-    palette: {
-      primary: {
-        main: "#f680dc"
-      },
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#f680dc"
+    },
 
-    text:{
-      primary: "#3d0f3e"
-        }
-    }
-  
-  });
+  text:{
+    primary: "#3d0f3e"
+      }
+  }
  
+});
+
 
   return (<ThemeProvider theme={theme}>
     
@@ -64,23 +51,10 @@ function App() {
         <Route path="/" element={<Home log={openSnackbar} />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Register />} />
-        <Route
-            path="/profile"
-            element={
-              <ProtectedRoute isAllowed={isLoggedIn}>
-                <Profile />
-              </ProtectedRoute>
-            }
-          />
-        <Route
-            path="/Date"
-            element={
-              <ProtectedRoute isAllowed={isLoggedIn}>
-                <Date />
-              </ProtectedRoute>
-            }
-          />
-        <Route path="/DatingSurvey" element={<DatingSurvey />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/Date" element={<Date />} />
+        <Route path="/Search" element={<Search />} />
+        <Route path="/Payment" element={<Payment />} />
       </Routes>
        <div className="background"></div>
 
