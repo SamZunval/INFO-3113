@@ -12,6 +12,7 @@ import Register from './components/SignUp.jsx';
 import Profile from './components/Profile.jsx';
 import Date from './components/Date.jsx'
 import DatingSurvey from './components/DatingSurvey.jsx'
+import Matches from "./components/Matches.jsx";
 import { Navigate } from "react-router-dom";
 
 
@@ -64,6 +65,7 @@ function App() {
         <Route path="/" element={<Home log={openSnackbar} />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Register />} />
+        <Route path="/matches" element={<Matches />} />
         <Route
             path="/profile"
             element={

@@ -54,8 +54,8 @@ const likeUser = async (user_id, user2_id) => {
         context = await db.initDatabase(env.DB_URI);
 
         //add like in both entries
-        users = await db.updateDocument(context, DATABASE_NAME, USER_COLLECTION, {_id : user_id}, {likes: user2_id});
-        users = await db.updateDocument(context, DATABASE_NAME, USER_COLLECTION, {_id : user2_id}, {liked: user_id});
+        users = await db.updateDocument(context, DATABASE_NAME, USER_COLLECTION, {userName : user_id}, { $push: {likes: user2_id} });
+        users = await db.updateDocument(context, DATABASE_NAME, USER_COLLECTION, {userName : user2_id}, { $push: {liked: user1_id} });
     }
     catch (e) {
         console.error(e);
@@ -65,6 +65,31 @@ const likeUser = async (user_id, user2_id) => {
     }
 
     return users;
+}
+const getMatches = async (userName) => {
+    let users = [];
+    let matches = [];
+    let context = undefined;
+    try {
+        // Initialize the database
+        context = await db.initDatabase(env.DB_URI);
+
+        //users = await db.findDocuments(context, DATABASE_NAME, USER_COLLECTION, {first_name: user.first_name, last_name: user.last_name}, {});
+        users = await db.findDocument(context, DATABASE_NAME, USER_COLLECTION, { userName: userName}, {});
+
+        if(users.likes != null || users.liked != null){
+            let match = users.likes.filter(element => users.liked.includes(element));
+            matches = await db.findDocuments(context, DATABASE_NAME, USER_COLLECTION, {userName : {$in : match}}, {});
+        }
+    }
+    catch (e) {
+        console.error(e);
+    }
+    finally {
+        context?.close();
+    }
+
+    return matches;
 }
 const loginUser = async (userName, password) => {
     let user = {};
@@ -236,5 +261,6 @@ export {
     retrieveImages,
     retrieveImage,
     likeUser,
-    loginUser
+    loginUser,
+    getMatches
 };

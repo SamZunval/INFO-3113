@@ -38,7 +38,7 @@ const users = {
         return data;
     },
     likeUser: async (user_id, user2_id) => {
-        let response = await fetch(serverRoute("users/like/:" + user_id + "-" +user2_id), {
+        let response = await fetch(serverRoute("users/like/" + user_id + "-" +user2_id), {
             headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
@@ -47,6 +47,14 @@ const users = {
         });
         return response;
     }, 
+    getMatches: async (userName) => {
+        let response = await fetch(serverRoute("users/likes/"+userName), {
+            headers,
+            method: 'GET'
+        });
+        let data = await response.json();
+        return data;
+    },
     postUser: async (user) => {
         let response = await fetch(serverRoute("db/adduser"), {
             headers: {

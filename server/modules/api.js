@@ -1,6 +1,8 @@
 import { readFile } from "node:fs/promises";
 import express from "express";
 import cors from "cors";
+import http from "http";
+import { Server } from "socket.io";
 import {  retrieveUsers,
     retrieveUser,
     addUser,
@@ -11,8 +13,11 @@ import {  retrieveUsers,
     retrieveImages,
     retrieveImage,
     likeUser,
-    loginUser} from './data.js';
+    loginUser,
+    getMatches} from './data.js';
 
+import * as colors from "./colors.js";
+import * as data from "./messager.js";
 // The Express application object
 const app = express();
 
@@ -55,11 +60,17 @@ app.get('/users/login/:username-:password', async (_request, response) => {
         response.sendStatus(500);
     }
 });
+app.get('/users/likes/:what', async (_request, response) => {
+    const userName = _request.params.what;
+    console.log("looking for matches for: " + userName);
+    let matches = await getMatches(userName);
+    response.json(matches);
+});
 app.post('/users/like/:liker-:liked', async (_request, response) => {
     try {
-        const liker_id = _request.params.liker;
-        const liked_id = _request.params.liked;
-        await likeUser(liker_id,liked_id);
+        const liker = _request.params.liker;
+        const liked = _request.params.liked;
+        await likeUser(liker,liked);
         response.sendStatus(200);
     }
     catch (e) {
@@ -134,12 +145,73 @@ app.get('/image/:what', async (_request, response) => {
     let images = await retrieveImage(image_id);
     response.json(images);
 });
-/*
-app.get('/bookmark', function (req, res) {//handles routing for the client
-  res.sendFile("public/index.html",{ root: '.' });
-});*/
+//socket stuff for messaging
+const httpServer = http.createServer(app);
+
+// New socket server
+const io = new Server(httpServer);
+
+// Socket event handling
+io.on("connect", socket  => {
+    console.log("New connection", socket.id);
+
+    // Client will have to emit "join" with joinInfo
+    socket .on("join", joinInfo => {
+        console.log(joinInfo);
+        // The client has to be sending joinInfo in this format
+        const { roomName, userName} = joinInfo;
+
+        if (data.isUserNameAvailable(userName, roomName)) {
+            socket.data = joinInfo;
+            socket.data.color = colors.getRandomColor(); // Add the color to socket.data
+            socket.join(roomName);
+
+            data.addUser(roomName, socket.data);
+            io.to(roomName).emit("room update", data.roomDetails(roomName));
+            socket.on("disconnect", () => 
+                {
+                    data.unregisterUser(userName);
+                    colors.releaseColor(socket.data.color); // Release the color from socket.data
+                    data.addMessage(roomName, { timestamp: Date.now(), sender: '', text: `${userName} has left the room`});
+                    data.removeUser(roomName,socket.data);
+                    io.to(roomName).emit("chat update", data.roomLog(roomName));
+                    io.to(roomName).emit("room update", data.roomDetails(roomName));
+
+                    data.updateTypingStatus(roomName, userName, false);
+                    io.to(roomName).emit("typing", data.getTypingUsers(roomName));
+                });
+            data.registerUser(userName);
+            
+            socket.on("message", text => {
+                const { roomName, userName, color } = socket.data;
+                const messageInfo = { sender: userName, text ,timestamp: Date.now(), color};
+                //console.log(roomName, messageInfo);
+                data.addMessage(roomName, messageInfo);
+                io.to(roomName).emit("chat update", data.roomLog(roomName));
+            });
+
+            socket.on("typing", typingInfo => {
+                const { roomName, userName, isTyping } = typingInfo;
+                data.updateTypingStatus(roomName, userName, isTyping);
+                io.to(roomName).emit("typing", data.getTypingUsers(roomName));
+            });
+
+            data.addMessage(roomName, { timestamp: Date.now(), sender: '', text: `${userName} has joined the room`});
+            io.to(roomName).emit("chat update", data.roomLog(roomName));
+
+            socket.emit("typing", data.getTypingUsers(roomName));
+        }
+        else {
+            joinInfo.error = `The name ${userName} is already taken`;
+        }
+        socket.emit("join-response", joinInfo);
+        
+    });
+});
+
 const startServer = (port) => {
-    app.listen(port, console.warn(`Listening on port ${port}`));
+    //app.listen(port, console.warn(`Listening on port ${port}`));
+    httpServer.listen(port, () => console.log(`Listening on port ${port}`));
 };
 
 console.log('Completed API setup.');
