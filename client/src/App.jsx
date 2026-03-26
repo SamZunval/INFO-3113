@@ -10,6 +10,8 @@ import Home from "./components/Home.jsx";
 import Login from "./components/Login.jsx"; 
 import Register from './components/SignUp.jsx';
 import Profile from './components/Profile.jsx';
+import Display from './components/DisplayPage.jsx';
+
 import Date from './components/Date.jsx'
 import DatingSurvey from './components/DatingSurvey.jsx'
 import Matches from "./components/Matches.jsx";
@@ -18,14 +20,24 @@ import Search from './components/Search.jsx';
 import Payment from './components/Payment.jsx';
 
 import "./App.css";
-
 import Header from "./components/Header.jsx";
 import { createTheme, ThemeProvider } from "@mui/material";
+
+  const ProtectedRoute = ({ children }) => {
+      if (!sessionStorage.getItem("userInfo")) {
+          alert("Please log in to access this page.");
+          return <Navigate to="/signup" replace />;
+      }
+
+      return children;
+  };
+
 function App() {
 
   // Snackbar State & Functions
   const [snackbarVisible, setSnackbarVisible] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
+
   const closeSnackbar = () => setSnackbarVisible(false);
   const openSnackbar = (text) => {
     setSnackbarMessage(text);
@@ -56,29 +68,29 @@ const theme = createTheme({
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Register />} />
         <Route path="/matches" element={<Matches />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/Date" element={<Date />} />
         <Route path="/Search" element={<Search />} />
         <Route path="/Payment" element={<Payment />} />
-        <Route
+                <Route path="/Display" element={<Display />} />
+
+         <Route
             path="/profile"
             element={
-              <ProtectedRoute isAllowed={isLoggedIn}>
+              <ProtectedRoute>
                 <Profile />
               </ProtectedRoute>
             }
           />
         <Route
-            path="/Date"
+            path="/date"
             element={
-              <ProtectedRoute isAllowed={isLoggedIn}>
+              <ProtectedRoute>
                 <Date />
               </ProtectedRoute>
             }
           />
         <Route path="/DatingSurvey" element={<DatingSurvey />} />
-      </Routes>
-       <div className="background"></div>
+        </Routes>
+        <div className="background"></div>
 
       <Snackbar
         sx={{zIndex: 99}}

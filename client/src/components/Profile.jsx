@@ -5,7 +5,12 @@ import {
   Button, 
   Typography, 
   Box, 
-  Divider 
+  Divider, 
+  InputLabel,
+  MenuItem,
+  FormControl,
+  Select,
+  Chip
 } from "@mui/material";
 
 
@@ -26,6 +31,17 @@ const Profile = () => {
   const [city, setCity] = useState("");
   const [career, setCareer] = useState("");
   const [college, setCollege] = useState("");
+
+  const language = ["Java", "Python", "C++", "JavaScript", "SQL"];
+  const [tester, setTester] = useState([]);
+const handleMultiple = (e) => {
+      const {
+         target: { value },
+      } = e;
+      setTester(
+         typeof value === "string" ? value.split(",") : value
+      );
+   };
 
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");        
@@ -90,6 +106,7 @@ const passwordVisibility = (field) => {
       career,
       college,
       password: newPassword ? newPassword : savedUser.password,
+      tester,
     };
 
     console.log("[Profile Update] Sending updated data to server:", updatedUser);
@@ -139,6 +156,34 @@ const passwordVisibility = (field) => {
           <TextField label="College" fullWidth value={college}
             onChange={(e) => setCollege(e.target.value)}
           />
+
+          <FormControl
+               variant="standard"
+               size="large"
+               sx={{ m: 1, minWidth: 120 }}
+               >
+               <InputLabel id="select" label="Lang">
+                  Select
+               </InputLabel>
+               <Select
+                  multiple
+                  value={tester}
+                  onChange={handleMultiple}
+                  renderValue={(selLang) => (
+                     <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                        {selLang.map((value) => (
+                           <Chip key={value} color="#FFC0CB" label={value} />
+                        ))}
+                     </Box>
+                  )}
+                  >
+                  {language.map((lang) => (
+                     <MenuItem key={lang} value={lang}>
+                        {lang}
+                     </MenuItem>
+                  ))}
+               </Select>
+            </FormControl>
 
           <Divider sx={{ my: 3 }}>
             <Typography color="textSecondary">Security & Password</Typography>
