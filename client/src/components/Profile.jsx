@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { 
   Paper, 
@@ -79,23 +80,29 @@ const passwordVisibility = (field) => {
       return;
     }
 
-    if (currentPassword !== savedUser.password)
+    
+    if(newPassword.length > 0 || confirmPassword.length > 0)
     {
-      alert("The current password you entered is incorrect. Changes not saved.");
-      return;
-    }
-
-    if (newPassword || confirmPassword) {
-      if (newPassword !== confirmPassword) {
-        alert("The new passwords do not match.");
+      if (currentPassword !== savedUser.password)
+      {
+        alert("The current password you entered is incorrect. Changes not saved.");
         return;
       }
-      if (newPassword === savedUser.password) {
-        alert("The new password cannot be the same as the current one.");
-        return;
+
+      if (newPassword || confirmPassword) {
+        if (newPassword !== confirmPassword) {
+          alert("The new passwords do not match.");
+          return;
+        }
+        if (newPassword === savedUser.password) {
+          alert("The new password cannot be the same as the current one.");
+          return;
+        }
       }
+
     }
 
+    
     const updatedUser = {
       ...savedUser,
       userName,
@@ -116,6 +123,11 @@ const passwordVisibility = (field) => {
       if (response.ok) {
         sessionStorage.setItem("userInfo", JSON.stringify(updatedUser));
         setSavedUser(updatedUser);
+
+        setCurrentPassword("");
+        setNewPassword("");
+        setConfirmPassword("");
+
         alert("Profile updated successfully!");
       } else {
         alert("Failed to update profile on the server.");
