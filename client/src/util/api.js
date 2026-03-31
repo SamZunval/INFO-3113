@@ -92,7 +92,28 @@ const users = {
         return response;
     },
 }
-
+const surveys = {
+    getSurveys: async () => {
+        let response = await fetch(serverRoute("surveys"), {
+            headers,
+            method: 'GET'
+        });
+        let data = await response.json();
+        return data;
+    },
+    postSurvey: async (user) => {
+        let response = await fetch(serverRoute("db/addsurvey"), {
+            headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            json: true, 
+            body: JSON.stringify(user),
+        });
+        return response;
+    }
+}
 const images = {
     postImage: async (image) => {
         let response = await fetch(serverRoute("db/addimage"), {
@@ -139,5 +160,6 @@ const images = {
 
 export {
     users,
-    images
+    images,
+    surveys
 }

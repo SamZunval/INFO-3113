@@ -5,7 +5,44 @@ import * as fs from "node:fs/promises";
 const DATABASE_NAME = "UsersInfo";
 const IMAGE_COLLECTION = "Images";
 const USER_COLLECTION = "Users";
+const SURVEY_COLLECTION = "Surveys";
 
+const addSurvey = async (survey) => {
+
+    let context = undefined;
+    try {
+        // Initialize the database
+        context = await db.initDatabase(env.DB_URI);
+        let result = await db.insertDocument(context, DATABASE_NAME, SURVEY_COLLECTION, user);
+        //console.log(`${result.insertedCount} user loaded into ${USER_COLLECTION}`);
+    }
+    catch (e) {
+        console.error(e);
+        return false;
+    }
+    finally {
+        context?.close();
+    }
+}
+const retrieveSurveys = async () => {
+    let users = [];
+
+    let context = undefined;
+    try {
+        // Initialize the database
+        context = await db.initDatabase(env.DB_URI);
+
+        users = await db.findDocuments(context, DATABASE_NAME, SURVEY_COLLECTION, {}, {});
+    }
+    catch (e) {
+        console.error(e);
+    }
+    finally {
+        context?.close();
+    }
+
+    return users;
+}
 const retrieveUsers = async () => {
     let users = [];
 
@@ -262,5 +299,7 @@ export {
     retrieveImage,
     likeUser,
     loginUser,
-    getMatches
+    getMatches,
+    addSurvey,
+    retrieveSurveys
 };

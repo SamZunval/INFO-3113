@@ -14,7 +14,9 @@ import {  retrieveUsers,
     retrieveImage,
     likeUser,
     loginUser,
-    getMatches} from './data.js';
+    getMatches,
+    addSurvey,
+    retrieveSurveys} from './data.js';
 
 import * as colors from "./colors.js";
 import * as data from "./messager.js";
@@ -37,6 +39,21 @@ app.use((req, _res, next) => {
     next();
 });
 // Endpoint Definitions
+//surveys
+app.get('/surveys', async (_request, response) => {
+    let users = await retrieveSurveys();
+    response.json(users);
+});
+app.post('/db/addsurvey', async (_request, response) => {
+    try {
+        let good = await addSurvey(_request.body);
+        response.sendStatus(200);
+    }
+    catch (e) {
+        console.error(e);
+        response.sendStatus(500);
+    }
+});
 //users
 app.get('/users', async (_request, response) => {
     let users = await retrieveUsers();
