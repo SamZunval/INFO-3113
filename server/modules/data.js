@@ -147,7 +147,7 @@ const removeUser = async (user) => {
         // Initialize the database
         context = await db.initDatabase(env.DB_URI);
 
-        let result = await db.deleteDocument(context, DATABASE_NAME, USER_COLLECTION, {_id: user._id});
+        let result = await db.deleteDocument(context, DATABASE_NAME, USER_COLLECTION, {userName : user.userName});
         //console.log(`${result.insertedCount} user removed from ${USER_COLLECTION}`);
     }
     catch (e) {
@@ -163,8 +163,8 @@ const updateUser = async (user) => {
     try {
         // Initialize the database
         context = await db.initDatabase(env.DB_URI);
-
-        let result = await db.replaceDocument(context, DATABASE_NAME, USER_COLLECTION, {_id : user._id}, user);
+        delete user['_id'];
+        let result = await db.replaceDocument(context, DATABASE_NAME, USER_COLLECTION, {userName : user.userName}, user);
         //console.log(`${result.insertedCount} user removed from ${USER_COLLECTION}`);
     }
     catch (e) {

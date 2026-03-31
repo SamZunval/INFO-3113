@@ -10,7 +10,6 @@ import Home from "./components/Home.jsx";
 import Login from "./components/Login.jsx"; 
 import Register from './components/SignUp.jsx';
 import Profile from './components/Profile.jsx';
-import Display from './components/DisplayPage.jsx';
 
 import Date from './components/Date.jsx'
 import DatingSurvey from './components/DatingSurvey.jsx'
@@ -70,7 +69,7 @@ const theme = createTheme({
         <Route path="/matches" element={<Matches />} />
         <Route path="/Search" element={<Search />} />
         <Route path="/Payment" element={<Payment />} />
-                <Route path="/Display" element={<Display />} />
+                
 
          <Route
             path="/profile"
