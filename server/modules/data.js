@@ -45,6 +45,80 @@ const retrieveUser = async (user_id) => {
 
     return users;
 }
+const likeUser = async (user_id, user2_id) => {
+    let users = [];
+
+    let context = undefined;
+    try {
+        // Initialize the database
+        context = await db.initDatabase(env.DB_URI);
+
+        //add like in both entries
+        users = await db.updateDocument(context, DATABASE_NAME, USER_COLLECTION, {userName : user_id}, { $push: {likes: user2_id} });
+        users = await db.updateDocument(context, DATABASE_NAME, USER_COLLECTION, {userName : user2_id}, { $push: {liked: user1_id} });
+    }
+    catch (e) {
+        console.error(e);
+    }
+    finally {
+        context?.close();
+    }
+
+    return users;
+}
+const getMatches = async (userName) => {
+    let users = [];
+    let matches = [];
+    let context = undefined;
+    try {
+        // Initialize the database
+        context = await db.initDatabase(env.DB_URI);
+
+        //users = await db.findDocuments(context, DATABASE_NAME, USER_COLLECTION, {first_name: user.first_name, last_name: user.last_name}, {});
+        users = await db.findDocument(context, DATABASE_NAME, USER_COLLECTION, { userName: userName}, {});
+
+        if(users.likes != null || users.liked != null){
+            let match = users.likes.filter(element => users.liked.includes(element));
+            matches = await db.findDocuments(context, DATABASE_NAME, USER_COLLECTION, {userName : {$in : match}}, {});
+        }
+    }
+    catch (e) {
+        console.error(e);
+    }
+    finally {
+        context?.close();
+    }
+
+    return matches;
+}
+const loginUser = async (userName, password) => {
+    let user = {};
+    let loggedIn = {};
+
+    let context = undefined;
+    try {
+        // Initialize the database
+        context = await db.initDatabase(env.DB_URI);
+
+        //add like in both entries
+        user = await db.findDocument(context, DATABASE_NAME, USER_COLLECTION, {userName : userName}, {});
+        if(!user || user != {} || user != [] || Object.keys(user).length != 0|| password == user.password){
+            loggedIn = user;
+        }
+       
+        // if (user && Object.keys(user).length > 0 && user.password === password) {
+        //     return user; // Success
+        // }
+    }
+    catch (e) {
+        console.error(e);
+    }
+    finally {
+        context?.close();
+    }
+
+    return loggedIn;
+}
 const addUser = async (user) => {
 
     let context = undefined;
@@ -52,11 +126,19 @@ const addUser = async (user) => {
         // Initialize the database
         context = await db.initDatabase(env.DB_URI);
 
-        let result = await db.insertDocument(context, DATABASE_NAME, USER_COLLECTION, user);
+        let found = await db.findDocument(context, DATABASE_NAME, USER_COLLECTION, {userName : user.userName}, {});
+        if(found == null){
+            let result = await db.insertDocument(context, DATABASE_NAME, USER_COLLECTION, user);
+            return true;
+        }
+        else {
+            return false;
+        }
         //console.log(`${result.insertedCount} user loaded into ${USER_COLLECTION}`);
     }
     catch (e) {
         console.error(e);
+        return false;
     }
     finally {
         context?.close();
@@ -223,5 +305,8 @@ export {
     addImage,
     removeImage,
     retrieveImages,
-    retrieveImage,addSkills
+    retrieveImage,
+    likeUser,
+    loginUser,
+    getMatches
 };

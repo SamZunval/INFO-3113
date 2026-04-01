@@ -23,6 +23,11 @@ const Header = (props) => {
  const [anchor, setAnchor] = useState(null);
 
  const handleMenuClick = (path) => {
+  if (!sessionStorage.getItem("userInfo")) {
+    alert("Please log in to access this page.");
+    setAnchor(null);
+    return;
+  }
   navigate(path);
   setAnchor(null); 
 };
@@ -38,7 +43,7 @@ const Header = (props) => {
         </Typography>
         <div style={{ flex: 1 }} />
         <Button style={{ color: "#fffefe" }} onClick={() => navigate("/login")} >Login</Button>
-        <Button style={{ color: "#fffefe" }} onClick={() => navigate("/signin")} >Sign In </Button>
+        <Button style={{ color: "#fffefe" }} onClick={() => navigate("/signup")} >Sign Up </Button>
         <IconButton style={{ color: "#fffefe" }} onClick={e => setAnchor(e.target)}>
         <MenuIcon />
         </IconButton>
@@ -47,8 +52,8 @@ const Header = (props) => {
         }}
          >
           <MenuItem onClick={() => handleMenuClick("/Profile")}>Profile</MenuItem>
-          <MenuItem>Date</MenuItem>
-          <MenuItem>Love</MenuItem>
+          <MenuItem onClick={() => handleMenuClick("/Date")}>Date</MenuItem>
+          <MenuItem onClick={() => handleMenuClick("/Love")}>Love</MenuItem>
           <MenuItem>Member Renew/Become</MenuItem>
           <MenuItem>Settings</MenuItem>
           <MenuItem>Logout</MenuItem>
