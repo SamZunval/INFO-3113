@@ -54,6 +54,7 @@ const Header = (props) => {
           <MenuItem onClick={() => handleMenuClick("/Profile")}>Profile</MenuItem>
           <MenuItem onClick={() => handleMenuClick("/Date")}>Date</MenuItem>
           <MenuItem onClick={() => handleMenuClick("/DisplayUser")}>UserProfile</MenuItem>
+          <MenuItem onClick={() => handleMenuClick("/matches")}>Matches</MenuItem>
           <MenuItem>Love</MenuItem>
           <MenuItem>Member Renew/Become</MenuItem>
           <MenuItem>Settings</MenuItem>
