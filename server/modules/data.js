@@ -82,6 +82,46 @@ const retrieveUser = async (user_id) => {
 
     return users;
 }
+const retrieveRecomendedMatches = async (username) => {
+    let users = [];
+
+    let context = undefined;
+    try {
+        // Initialize the database
+        context = await db.initDatabase(env.DB_URI);
+        let user = await db.findDocument(context, DATABASE_NAME, USER_COLLECTION, { userName: username}, {});
+        users = await db.findDocuments(context, DATABASE_NAME, USER_COLLECTION, {userName: {$nin: [...user.blocks,...user.blocked,username]}}, {});
+    }
+    catch (e) {
+        console.error(e);
+    }
+    finally {
+        context?.close();
+    }
+
+    return users;
+}
+const blockUser = async (user_id, user2_id) => {
+    let users = [];
+
+    let context = undefined;
+    try {
+        // Initialize the database
+        context = await db.initDatabase(env.DB_URI);
+
+        //add like in both entries
+        users = await db.updateDocument(context, DATABASE_NAME, USER_COLLECTION, {userName : user_id}, { $push: {blocks: user2_id} });
+        users = await db.updateDocument(context, DATABASE_NAME, USER_COLLECTION, {userName : user2_id}, { $push: {blocked: user1_id} });
+    }
+    catch (e) {
+        console.error(e);
+    }
+    finally {
+        context?.close();
+    }
+
+    return users;
+}
 const likeUser = async (user_id, user2_id) => {
     let users = [];
 
@@ -114,7 +154,7 @@ const getMatches = async (userName) => {
         //users = await db.findDocuments(context, DATABASE_NAME, USER_COLLECTION, {first_name: user.first_name, last_name: user.last_name}, {});
         users = await db.findDocument(context, DATABASE_NAME, USER_COLLECTION, { userName: userName}, {});
 
-        if(users.likes != null || users.liked != null){
+        if(users.likes != null && users.liked != null){
             let match = users.likes.filter(element => users.liked.includes(element));
             matches = await db.findDocuments(context, DATABASE_NAME, USER_COLLECTION, {userName : {$in : match}}, {});
         }
@@ -139,16 +179,9 @@ const loginUser = async (userName, password) => {
 
         //add like in both entries
         user = await db.findDocument(context, DATABASE_NAME, USER_COLLECTION, {userName : userName}, {});
-        if(!user || user != {} || user != [] || Object.keys(user).length != 0|| password == user.password){
+        if(user && user != {} && user != [] && Object.keys(user).length != 0 && password == user.password){
             loggedIn = user;
         }
-<<<<<<< HEAD
-=======
-       
-        // if (user && Object.keys(user).length > 0 && user.password === password) {
-        //     return user; // Success
-        // }
->>>>>>> feature/syed
     }
     catch (e) {
         console.error(e);
@@ -348,11 +381,9 @@ export {
     retrieveImage,
     likeUser,
     loginUser,
-<<<<<<< HEAD
     getMatches,
     addSurvey,
-    retrieveSurveys
-=======
-    getMatches
->>>>>>> feature/syed
+    retrieveSurveys,
+    blockUser,
+    retrieveRecomendedMatches
 };
