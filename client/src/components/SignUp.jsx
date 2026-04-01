@@ -13,10 +13,19 @@ import { useNavigate } from 'react-router-dom'; //
 import * as api from "../util/api"
 import logo from "../assets/Ducky.png";
 
+import { 
+    IconButton, 
+    InputAdornment 
+} from "@mui/material";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+
 const Register = () => {
     const navigate = useNavigate();
     
     const [registerData, setRegisterData] = useState({
+        firstName: "",
+        lastName: "",
         userName: "",
         email: "",
         password: "",
@@ -24,21 +33,26 @@ const Register = () => {
         province: "",
         city: "",
         birthDay: "",
-        postalCode: ""
+        postalCode: "",
+        college: "",
+        career: "",
     });
 
     const [error, setError] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleChange = (e) => {
        setRegisterData({ ...registerData, [e.target.name]: e.target.value });
     };
+
+    const handleClickShowPassword = () => setShowPassword(!showPassword);
 
     const handleRegister = async () => {
         try {
             console.log("Submitting registration:", registerData);
             api.users.postUser(registerData);
             setError("");
-            localStorage.setItem("userName", registerData.userName);
+            sessionStorage.setItem("userName", registerData.userName);
             navigate('/login');
 
         } catch (err) {
@@ -52,14 +66,35 @@ const Register = () => {
             <CardContent>
                  <img src={logo} alt="Cupid Community Logo" style={{ width: "40%", maxWidth: "200px", margin: "1em" }} />
                 <CardHeader title="Create an Account" sx={{ color: "#f680dc" }} />
-                <TextField fullWidth label="User Name" name="userName" 
+
+
+                 <TextField fullWidth label="User Name" name="userName" 
                     value={registerData.userName} onChange={handleChange} sx={{ mb: "1em" }} />
+
+                <TextField fullWidth label="First Name" name="firstName" 
+                    value={registerData.firstName} onChange={handleChange} sx={{ mb: "1em" }} />
+
+                <TextField fullWidth label="Last Name" name="lastName" 
+                    value={registerData.lastName} onChange={handleChange} sx={{ mb: "1em" }} />
                 
                 <TextField fullWidth label="Email" name="email" type="email"
                     value={registerData.email} onChange={handleChange} sx={{ mb: "1em" }} />
                 
-                <TextField fullWidth label="Password" name="password" type="password"
-                    value={registerData.password} onChange={handleChange} sx={{ mb: "1em" }} />
+                <TextField fullWidth label="Password" name="password" type={showPassword ? "text" : "password"}
+                    value={registerData.password} onChange={handleChange} sx={{ mb: "1em" }} 
+                    InputProps={{
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <IconButton
+                                    aria-label="toggle password visibility"
+                                    onClick={handleClickShowPassword}
+                                    edge="end"
+                                >
+                                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                                </IconButton>
+                            </InputAdornment>
+                        ),
+                    }}/>
                 
                 <TextField fullWidth label="Birthday" name="birthDay" type="birthDay"
                     value={registerData.birthDay} onChange={handleChange} sx={{ mb: "1em" }} />
@@ -75,6 +110,12 @@ const Register = () => {
                 
                 <TextField fullWidth label="Postal Code" name="postalCode" type="postalCode"
                     value={registerData.postalCode} onChange={handleChange} sx={{ mb: "1em" }} />
+
+                <TextField fullWidth label="College" name="college" type="college"
+                    value={registerData.college} onChange={handleChange} sx={{ mb: "1em" }} />
+                
+                 <TextField fullWidth label="Carrer" name="career" type="career"
+                    value={registerData.career} onChange={handleChange} sx={{ mb: "1em" }} />
                 
                 <Button fullWidth variant="contained" 
                     disabled={!registerData.password || !registerData.userName || !registerData.email}

@@ -29,6 +29,32 @@ const users = {
         let data = await response.json();
         return data[0];
     },
+    loginUser: async (username, password) => {
+        let response = await fetch(serverRoute("users/login/"+username+"-"+password), {
+            headers,
+            method: 'GET'
+        });
+        let data = await response.json();
+        return data;
+    },
+    likeUser: async (user_id, user2_id) => {
+        let response = await fetch(serverRoute("users/like/" + user_id + "-" +user2_id), {
+            headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+            },
+            method: 'POST',
+        });
+        return response;
+    }, 
+    getMatches: async (userName) => {
+        let response = await fetch(serverRoute("users/likes/"+userName), {
+            headers,
+            method: 'GET'
+        });
+        let data = await response.json();
+        return data;
+    },
     postUser: async (user) => {
         let response = await fetch(serverRoute("db/adduser"), {
             headers: {
@@ -66,7 +92,28 @@ const users = {
         return response;
     },
 }
-
+const surveys = {
+    getSurveys: async () => {
+        let response = await fetch(serverRoute("surveys"), {
+            headers,
+            method: 'GET'
+        });
+        let data = await response.json();
+        return data;
+    },
+    postSurvey: async (user) => {
+        let response = await fetch(serverRoute("db/addsurvey"), {
+            headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            json: true, 
+            body: JSON.stringify(user),
+        });
+        return response;
+    }
+}
 const images = {
     postImage: async (image) => {
         let response = await fetch(serverRoute("db/addimage"), {
@@ -113,5 +160,6 @@ const images = {
 
 export {
     users,
-    images
+    images,
+    surveys
 }
