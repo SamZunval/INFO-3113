@@ -15,9 +15,13 @@ import {  retrieveUsers,
     retrieveImage,
     likeUser,
     loginUser,
+<<<<<<< HEAD
     getMatches,
     addSurvey,
     retrieveSurveys} from './data.js';
+=======
+    getMatches} from './data.js';
+>>>>>>> feature/syed
 
 import * as colors from "./colors.js";
 import * as data from "./messager.js";

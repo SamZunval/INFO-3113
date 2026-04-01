@@ -11,12 +11,26 @@ import {
   MenuItem,
   FormControl,
   Select,
+<<<<<<< HEAD
   Chip,
   IconButton, 
   InputAdornment 
+=======
+  Chip
+>>>>>>> feature/syed
 } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import * as api from "../util/api";
+
+
+import { 
+    IconButton, 
+    InputAdornment 
+} from "@mui/material";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+
 import * as api from "../util/api";
 
 const Profile = () => {
@@ -41,10 +55,33 @@ const Profile = () => {
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   
+<<<<<<< HEAD
   // User session
   const [savedUser, setSavedUser] = useState(null);
 
   // Load user data from session storage on mount
+=======
+  const language = ["Java", "Python", "C++", "JavaScript", "SQL"];
+  const [tester, setTester] = useState([]);
+const handleMultiple = (e) => {
+      const {
+         target: { value },
+      } = e;
+      setTester(
+         typeof value === "string" ? value.split(",") : value
+      );
+   };
+
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");        
+  const [confirmPassword, setConfirmPassword] = useState(""); 
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  
+  const [savedUser, setSavedUser] = useState(null);
+
+>>>>>>> feature/syed
   useEffect(() => {
     const user = sessionStorage.getItem("userInfo");
     if (user) {
@@ -60,6 +97,7 @@ const Profile = () => {
     }
   }, []);
 
+<<<<<<< HEAD
   // Handle multiple language selection
   const handleMultiple = (e) => {
     const { target: { value } } = e;
@@ -74,15 +112,31 @@ const Profile = () => {
   };
 
   // Handle save changes
+=======
+const passwordVisibility = (field) => {
+  if (field === "current") setShowCurrentPassword(!showCurrentPassword);
+  if (field === "new") setShowNewPassword(!showNewPassword);
+  if (field === "confirm") setShowConfirmPassword(!showConfirmPassword);
+};
+
+>>>>>>> feature/syed
   const handleSave = async () => {
     if (!savedUser) {
       alert("No user session found.");
       return;
     }
 
+<<<<<<< HEAD
     // Password validation if password fields are filled
     if (newPassword.length > 0 || confirmPassword.length > 0) {
       if (currentPassword !== savedUser.password) {
+=======
+    
+    if(newPassword.length > 0 || confirmPassword.length > 0)
+    {
+      if (currentPassword !== savedUser.password)
+      {
+>>>>>>> feature/syed
         alert("The current password you entered is incorrect. Changes not saved.");
         return;
       }
@@ -97,8 +151,15 @@ const Profile = () => {
           return;
         }
       }
+<<<<<<< HEAD
     }
 
+=======
+
+    }
+
+    
+>>>>>>> feature/syed
     const updatedUser = {
       ...savedUser,
       userName,
@@ -138,6 +199,7 @@ const Profile = () => {
     <Box>
       <Paper>
         <Divider sx={{ my: 2 }} />
+<<<<<<< HEAD
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, p: 3 }}>
           {/* Basic Info Section */}
           <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#333' }}>
@@ -251,6 +313,83 @@ const Profile = () => {
                 </InputAdornment>
               ),
             }}
+=======
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+          <TextField label="Username" variant="outlined" fullWidth value={userName} 
+          onChange={(e) => setUserName(e.target.value)}
+          />
+
+          <Box sx={{ display: "flex", gap: 2 }}>
+            <TextField label="First Name" fullWidth value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+            />
+            <TextField label="Last Name" fullWidth value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+            />
+          </Box>
+
+          <TextField label="Email" fullWidth value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <TextField label="City" fullWidth value={city}
+            onChange={(e) => setCity(e.target.value)}
+          />
+          <TextField label="Career" fullWidth value={career}
+            onChange={(e) => setCareer(e.target.value)}
+          />
+          <TextField label="College" fullWidth value={college}
+            onChange={(e) => setCollege(e.target.value)}
+          />
+
+          <FormControl
+               variant="standard"
+               size="large"
+               sx={{ m: 1, minWidth: 120 }}
+               >
+               <InputLabel id="select" label="Lang">
+                  Select
+               </InputLabel>
+               <Select
+                  multiple
+                  value={tester}
+                  onChange={handleMultiple}
+                  renderValue={(selLang) => (
+                     <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                        {selLang.map((value) => (
+                           <Chip key={value} color="#FFC0CB" label={value} />
+                        ))}
+                     </Box>
+                  )}
+                  >
+                  {language.map((lang) => (
+                     <MenuItem key={lang} value={lang}>
+                        {lang}
+                     </MenuItem>
+                  ))}
+               </Select>
+            </FormControl>
+
+          <Divider sx={{ my: 3 }}>
+            <Typography color="textSecondary">Security & Password</Typography>
+          </Divider>
+
+          <TextField fullWidth label="Current Password" type={showCurrentPassword ? "text" : "password"} value={currentPassword}
+            onChange={(e) => setCurrentPassword(e.target.value)}
+            helperText="Enter your current password to verify"
+            InputProps={{
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <IconButton
+                                    aria-label="toggle password visibility"
+                                    onClick={() => passwordVisibility("current")}
+                                    edge="end"
+                                >
+                                    {showCurrentPassword ? <VisibilityOff /> : <Visibility />}
+                                </IconButton>
+                            </InputAdornment>
+                        ),
+                    }}
+>>>>>>> feature/syed
           />
 
           <Box sx={{ display: "flex", gap: 2 }}>
@@ -266,19 +405,31 @@ const Profile = () => {
                   ? "New password must differ from current"
                   : ""
               }
+<<<<<<< HEAD
               InputProps={{
+=======
+               InputProps={{
+>>>>>>> feature/syed
                 endAdornment: (
                   <InputAdornment position="end">
                     <IconButton
                       aria-label="toggle password visibility"
                       onClick={() => passwordVisibility("new")}
                       edge="end"
+<<<<<<< HEAD
                     >
+=======
+                      >
+>>>>>>> feature/syed
                       {showNewPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
                 ),
               }}
+<<<<<<< HEAD
+=======
+              
+>>>>>>> feature/syed
             />
             <TextField
               fullWidth
@@ -299,7 +450,11 @@ const Profile = () => {
                       aria-label="toggle password visibility"
                       onClick={() => passwordVisibility("confirm")}
                       edge="end"
+<<<<<<< HEAD
                     >
+=======
+                      >
+>>>>>>> feature/syed
                       {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
@@ -308,12 +463,19 @@ const Profile = () => {
             />
           </Box>
 
+<<<<<<< HEAD
           {/* Save Button */}
+=======
+>>>>>>> feature/syed
           <Button
             fullWidth
             variant="contained"
             onClick={handleSave}
+<<<<<<< HEAD
             sx={{ backgroundColor: "#f680dc", "&:hover": { backgroundColor: "#d46bb8" }, mt: 2 }}
+=======
+            sx={{ backgroundColor: "#f680dc", "&:hover": { backgroundColor: "#d46bb8" } }}
+>>>>>>> feature/syed
           >
             Save Changes
           </Button>

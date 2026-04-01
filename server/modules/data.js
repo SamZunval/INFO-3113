@@ -142,6 +142,13 @@ const loginUser = async (userName, password) => {
         if(!user || user != {} || user != [] || Object.keys(user).length != 0|| password == user.password){
             loggedIn = user;
         }
+<<<<<<< HEAD
+=======
+       
+        // if (user && Object.keys(user).length > 0 && user.password === password) {
+        //     return user; // Success
+        // }
+>>>>>>> feature/syed
     }
     catch (e) {
         console.error(e);
@@ -341,7 +348,11 @@ export {
     retrieveImage,
     likeUser,
     loginUser,
+<<<<<<< HEAD
     getMatches,
     addSurvey,
     retrieveSurveys
+=======
+    getMatches
+>>>>>>> feature/syed
 };
