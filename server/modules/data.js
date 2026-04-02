@@ -90,7 +90,7 @@ const retrieveRecomendedMatches = async (username) => {
         // Initialize the database
         context = await db.initDatabase(env.DB_URI);
         let user = await db.findDocument(context, DATABASE_NAME, USER_COLLECTION, { userName: username}, {});
-        users = await db.findDocuments(context, DATABASE_NAME, USER_COLLECTION, {userName: {$nin: [...user.blocks,...user.blocked,username]}}, {});
+        users = await db.findDocuments(context, DATABASE_NAME, USER_COLLECTION, {userName: {$nin: [...user.blocks,...user.blocked,...user.likes,username]}}, {});
     }
     catch (e) {
         console.error(e);
@@ -155,7 +155,7 @@ const getMatches = async (userName) => {
         users = await db.findDocument(context, DATABASE_NAME, USER_COLLECTION, { userName: userName}, {});
 
         if(users.likes != null && users.liked != null){
-            let match = users.likes.filter(element => users.liked.includes(element));
+            let match = users.likes.filter(element => users.liked.includes(element) && !users.blocked.includes(element) && !user.blocks.includes(element));
             matches = await db.findDocuments(context, DATABASE_NAME, USER_COLLECTION, {userName : {$in : match}}, {});
         }
     }
