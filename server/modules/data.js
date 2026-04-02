@@ -13,7 +13,7 @@ const addSurvey = async (survey) => {
     try {
         // Initialize the database
         context = await db.initDatabase(env.DB_URI);
-        let result = await db.insertDocument(context, DATABASE_NAME, SURVEY_COLLECTION, user);
+        let result = await db.insertDocument(context, DATABASE_NAME, SURVEY_COLLECTION, survey);
         //console.log(`${result.insertedCount} user loaded into ${USER_COLLECTION}`);
     }
     catch (e) {

@@ -12,7 +12,7 @@ import {
 import Rating from "@mui/material/Rating";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-
+import * as api from "../util/api"
 
 
 
@@ -52,7 +52,7 @@ const Survey = (props) => {
           </Box>
   
 
-               <Button fullWidth variant="contained"  disabled={!dateName || !location || rating === 0 || !nextDate} onClick={() => props.joinRoom({ dateName, location })}>
+               <Button fullWidth variant="contained"  disabled={!dateName || !location || rating === 0 || !nextDate} onClick={() => api.surveys.postSurvey({ dateName, location,rating, nextDate})}>
              Submit </Button>
 
             </CardContent>
