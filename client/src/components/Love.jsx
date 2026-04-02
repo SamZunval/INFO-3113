@@ -1,23 +1,30 @@
-import {useState } from "react";
+import {useState,useEffect } from "react";
 import {
   Paper,
   Box,
   Typography
 } from "@mui/material";
+import * as api from "../util/api"; 
 
 const Love = () => {
-const [usermarks] = useState(() => {
-  return JSON.parse(localStorage.getItem("usermarks")) || [];
-});
+  const [usermarks, setusermarks] = useState([]);
 
+  useEffect(() => {
+          const loadMatches = async () => {
+              let username = JSON.parse(sessionStorage.getItem("userInfo")).userName;
+              //console.log("username: " + username);
+              let result = await api.users.getMatches(username);
+              setusermarks(result);
+          }
+          loadMatches();
+      }, []);
 
-
-  if (!usermarks) return <></>;
+  //if (!usermarks) return <></>;
 
   return (
     <Box sx={{ maxWidth: 700, margin: "2rem auto",color: "#f680dc"}}>
       <Typography variant="h4" sx={{ mb: 3 }}>
-        Your Love
+        Your Matches
       </Typography>
 
       {usermarks.map((user) => (
