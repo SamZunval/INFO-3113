@@ -40,6 +40,21 @@ app.use((req, _res, next) => {
     next();
 });
 // Endpoint Definitions
+//stats
+app.get('/stats', async (_request, response) => {
+    let users = await retrieveStats();
+    response.json(users);
+});
+app.post('/updateCount', async (_request, response) => {
+    try {
+        await updateCount();
+        response.sendStatus(200);
+    }
+    catch (e) {
+        console.error(e);
+        response.sendStatus(500);
+    }
+});
 //surveys
 app.get('/surveys', async (_request, response) => {
     let users = await retrieveSurveys();

@@ -11,7 +11,26 @@ const headers = {
 }
 
 const serverRoute = (route) => `${API_IP}:${API_PORT}/${route}`;
-
+const stats = {
+    getStats: async () => {
+        let response = await fetch(serverRoute("stats"), {
+            headers,
+            method: 'GET'
+        });
+        let data = await response.json();
+        return data;
+    },
+    updateCount: async () => {
+        let response = await fetch(serverRoute("updateCount"), {
+            headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+            },
+            method: 'POST',
+        });
+        return response;
+    }
+}
 const users = {
     getUsers: async () => {
         let response = await fetch(serverRoute("users"), {
@@ -179,5 +198,6 @@ const images = {
 export {
     users,
     images,
-    surveys
+    surveys,
+    stats
 }

@@ -6,9 +6,49 @@ const DATABASE_NAME = "UsersInfo";
 const IMAGE_COLLECTION = "Images";
 const USER_COLLECTION = "Users";
 const SURVEY_COLLECTION = "Surveys";
+const ADMIN_COLLECTION = "AdminInfo";
 
+const retrieveStats = async () => {
+    let context = undefined;
+    let stats = {};
+    try {
+        // Initialize the database
+        context = await db.initDatabase(env.DB_URI);
+
+        //users = await db.findDocuments(context, DATABASE_NAME, USER_COLLECTION, {first_name: user.first_name, last_name: user.last_name}, {});
+        let counts = await db.findDocument(context, DATABASE_NAME, ADMIN_COLLECTION, {id : 1}, {});
+        let users = await db.findDocuments(context, DATABASE_NAME, USER_COLLECTION, {member: "Free"}, {});
+        let members = await db.findDocuments(context, DATABASE_NAME, USER_COLLECTION, {member: "Paid"}, {});
+        stats.numFree = users.length;
+        stats.numPaid = members.length;
+        stats.matches = counts.matches;
+        stats.revealedData = revealedData;
+    }
+    catch (e) {
+        console.error(e);
+    }
+    finally {
+        context?.close();
+    }
+
+    return stats;
+}
+const updateCount = async () => {
+    let context = undefined;
+    try {
+        // Initialize the database
+        context = await db.initDatabase(env.DB_URI);
+
+        let matches = await db.updateDocument(context, DATABASE_NAME, ADMIN_COLLECTION, {id : 1}, {$inc: {revealedData: 1}});
+    }
+    catch (e) {
+        console.error(e);
+    }
+    finally {
+        context?.close();
+    }
+}
 const addSurvey = async (survey) => {
-
     let context = undefined;
     try {
         // Initialize the database
@@ -133,6 +173,11 @@ const likeUser = async (user_id, user2_id) => {
         //add like in both entries
         users = await db.updateDocument(context, DATABASE_NAME, USER_COLLECTION, {userName : user_id}, { $push: {likes: user2_id} });
         users = await db.updateDocument(context, DATABASE_NAME, USER_COLLECTION, {userName : user2_id}, { $push: {liked: user1_id} });
+        //update total matches
+        let user = await db.findDocument(context, DATABASE_NAME, USER_COLLECTION, {_id : user2_id}, {});
+        if(user.likes.includes(user_id)){
+            let matches = await db.updateDocument(context, DATABASE_NAME, ADMIN_COLLECTION, {id : 1}, {$inc: {matches: 1}});
+        } 
     }
     catch (e) {
         console.error(e);
@@ -385,5 +430,7 @@ export {
     addSurvey,
     retrieveSurveys,
     blockUser,
-    retrieveRecomendedMatches
+    retrieveRecomendedMatches,
+    updateCount,
+    retrieveStats
 };
