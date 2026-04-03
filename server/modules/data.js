@@ -130,7 +130,7 @@ const retrieveRecomendedMatches = async (username) => {
         // Initialize the database
         context = await db.initDatabase(env.DB_URI);
         let user = await db.findDocument(context, DATABASE_NAME, USER_COLLECTION, { userName: username}, {});
-        users = await db.findDocuments(context, DATABASE_NAME, USER_COLLECTION, {userName: {$nin: [...user.blocks,...user.blocked,...user.likes,username]}}, {});
+        users = await db.findDocuments(context, DATABASE_NAME, USER_COLLECTION, {userName: {$nin: [...user.blocks,...user.blocked,...user.likes,username]}, gender: user.preferGender}, {});
     }
     catch (e) {
         console.error(e);
