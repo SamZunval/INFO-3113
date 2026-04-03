@@ -18,7 +18,13 @@ const Love = () => {
           }
           loadMatches();
       }, []);
-
+    const handleContact = async () => {
+      await api.stats.updateCount();//todo: actualy handle hiding and unhiding div
+    }
+    const handleBlock = async (username) => {
+      let user = JSON.parse(sessionStorage.getItem("userInfo")).userName;
+      await api.users.blockUser(user,username);
+    }
   //if (!usermarks) return <></>;
 
   return (
@@ -34,7 +40,7 @@ const Love = () => {
             {user.userName}
           </div>
 
-          <div style={{ fontSize: "20px" }}>
+          <div key={user._id + "contact"} style={{ fontSize: "20px" }}>
             {user.email}
           </div>
 
@@ -53,6 +59,16 @@ const Love = () => {
           <div style={{ fontSize: "15px", marginTop: "10px" }}>
             Birthday: {user.birthDay}
           </div>
+          <Button fullWidth variant="contained" 
+                              onClick={handleContact}
+                          >
+                              Display Contact Information
+          </Button>
+          <Button fullWidth variant="contained" 
+                              onClick={handleBlock(user.userName)}
+                          >
+                              Block user
+          </Button>
         </Paper>
       ))}
     </Box>
