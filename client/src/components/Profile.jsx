@@ -77,11 +77,6 @@ const passwordVisibility = (field) => {
 };
 
   const handleSave = async () => {
-    // if (!savedUser) {
-    //   alert("No user session found.");
-    //   return;
-    // }
-
     if(newPassword.length > 0 || confirmPassword.length > 0)
     {
       if (currentPassword !== savedUser.password)

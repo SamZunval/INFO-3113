@@ -68,34 +68,23 @@ const theme = createTheme({
         <Route path="/" element={<Home log={openSnackbar} />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Register />} />
+        <Route path="/payment" element={<Payment />} />
 
-        <Route path="/Love" element={<DisplayUser />} />
-        <Route path="/matches" element={<Matches />} />
-        <Route path="/Search" element={<Search />} />
-        <Route path="/Payment" element={<Payment />} />
-                {/* <Route path="/Display" element={<Display />} /> */}
 
-        <Route path="/Loves" element={<Loves />} />
+        <Route path="/Love" element={<ProtectedRoute><DisplayUser /></ProtectedRoute>} />
+        <Route path="/matches" element={<ProtectedRoute><Matches /></ProtectedRoute>} />
+        <Route path="/Search" element={<ProtectedRoute><Search /></ProtectedRoute>} />
+        <Route path="/Payment" element={<ProtectedRoute><Payment /></ProtectedRoute>} />
+        <Route path="/DisplayUser" element={<ProtectedRoute><DisplayUser /></ProtectedRoute>} />
+        <Route path="/Loves" element={<ProtectedRoute><Loves /></ProtectedRoute>} />
 
-         <Route
-            path="/profile"
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            }
-          />
-        <Route
-            path="/date"
-            element={
-              <ProtectedRoute>
-                <Date />
-              </ProtectedRoute>
-            }
-          />
-        <Route path="/DatingSurvey" element={<DatingSurvey />} />
-        </Routes>
-        <div className="background"></div>
+        <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+        <Route path="/date" element={<ProtectedRoute><Date /></ProtectedRoute>} />
+
+        <Route path="/DatingSurvey" element={<ProtectedRoute><DatingSurvey /></ProtectedRoute>} />
+        
+      </Routes>
+      <div className="background"></div>
 
       <Snackbar
         sx={{zIndex: 99}}
