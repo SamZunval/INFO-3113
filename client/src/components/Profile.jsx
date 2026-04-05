@@ -1,5 +1,4 @@
-
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { 
   Paper, 
   TextField, 
@@ -14,7 +13,6 @@ import {
   Chip
 } from "@mui/material";
 
-
 import { 
     IconButton, 
     InputAdornment 
@@ -25,26 +23,31 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import * as api from "../util/api";
 
 const Profile = () => {
-  const [userName, setUserName] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [city, setCity] = useState("");
-  const [career, setCareer] = useState("");
-  const [college, setCollege] = useState("");
+   //Gets all user data 
+  const getUser = () => {
+    const stored = sessionStorage.getItem("userInfo");
+    if (!stored) return null;
 
-  const language = ["Java", "Python", "C++", "JavaScript", "SQL"];
-  const [tester, setTester] = useState([]);
-const handleMultiple = (e) => {
-      const {
-         target: { value },
-      } = e;
-      setTester(
-         typeof value === "string" ? value.split(",") : value
-      );
-   };
+    try {
+      return JSON.parse(stored);
+    } catch {
+      return null;
+    }
+  };
+  //User information
+  const userData = getUser();
+  const [userName, setUserName] = useState(userData?.userName || "");
+  const [firstName, setFirstName] = useState(userData?.firstName || "");
+  const [lastName, setLastName] = useState(userData?.lastName || "");
+  const [email, setEmail] = useState(userData?.email || "");
+  const [city, setCity] = useState(userData?.city || "");
+  const [career, setCareer] = useState(userData?.career || "");
+  const [college, setCollege] = useState(userData?.college || "");
 
-  const [currentPassword, setCurrentPassword] = useState("");
+  const [traits, setTraits] = useState([]);
+
+  //Password information?
+  const [currentPassword, setCurrentPassword] = useState(userData?.password || "");
   const [newPassword, setNewPassword] = useState("");        
   const [confirmPassword, setConfirmPassword] = useState(""); 
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
@@ -53,20 +56,29 @@ const handleMultiple = (e) => {
   
   const [savedUser, setSavedUser] = useState(null);
 
-  useEffect(() => {
-    const user = sessionStorage.getItem("userInfo");
-    if (user) {
-      const userData = JSON.parse(user);
-      setSavedUser(userData);
-      setUserName(userData.userName || "");
-      setFirstName(userData.firstName || "");
-      setLastName(userData.lastName || "");
-      setEmail(userData.email || "");
-      setCity(userData.city || "");
-      setCareer(userData.career || "");
-      setCollege(userData.college || "");
-    }
-  }, []);
+  //Trait list and method for dealing with trait list
+  const traitsList = [
+    "Object-Oriented Thinker",
+    "Functional Programming Fan",
+    "Data Structures Expert",
+    "API Builder",
+    "Database Designer",
+    "Cloud Curious",
+    "Security Minded",
+    "Performance Optimizer",
+    "Test Driven Developer",
+    "Agile Team Player"
+  ]
+  
+  const handleMultiple = (e) => {
+      const {
+         target: { value },
+      } = e;
+      setTraits(
+         typeof value === "string" ? value.split(",") : value
+      );
+   };
+
 
 const passwordVisibility = (field) => {
   if (field === "current") setShowCurrentPassword(!showCurrentPassword);
@@ -75,15 +87,14 @@ const passwordVisibility = (field) => {
 };
 
   const handleSave = async () => {
-    if (!savedUser) {
-      alert("No user session found.");
-      return;
-    }
+    // if (!savedUser) {
+    //   alert("No user session found.");
+    //   return;
+    // }
 
-    
     if(newPassword.length > 0 || confirmPassword.length > 0)
     {
-      if (currentPassword !== savedUser.password)
+      if (currentPassword !== userData.password)
       {
         alert("The current password you entered is incorrect. Changes not saved.");
         return;
@@ -94,17 +105,16 @@ const passwordVisibility = (field) => {
           alert("The new passwords do not match.");
           return;
         }
-        if (newPassword === savedUser.password) {
+        if (newPassword === userData.password) {
           alert("The new password cannot be the same as the current one.");
           return;
         }
       }
 
     }
-
     
     const updatedUser = {
-      ...savedUser,
+      ...userData,
       userName,
       firstName,
       lastName,
@@ -112,8 +122,8 @@ const passwordVisibility = (field) => {
       city,
       career,
       college,
-      password: newPassword ? newPassword : savedUser.password,
-      tester,
+      password: newPassword ? newPassword : userData.password,
+      traits,
     };
 
     console.log("[Profile Update] Sending updated data to server:", updatedUser);
@@ -179,7 +189,7 @@ const passwordVisibility = (field) => {
                </InputLabel>
                <Select
                   multiple
-                  value={tester}
+                  value={traits}
                   onChange={handleMultiple}
                   renderValue={(selLang) => (
                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
@@ -189,7 +199,7 @@ const passwordVisibility = (field) => {
                      </Box>
                   )}
                   >
-                  {language.map((lang) => (
+                  {traitsList.map((lang) => (
                      <MenuItem key={lang} value={lang}>
                         {lang}
                      </MenuItem>

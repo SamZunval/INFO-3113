@@ -33,7 +33,7 @@ import { createTheme, ThemeProvider } from "@mui/material";
   };
 
 function App() {
-
+ 
   // Snackbar State & Functions
   const [snackbarVisible, setSnackbarVisible] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
