@@ -10,7 +10,8 @@ import Home from "./components/Home.jsx";
 import Login from "./components/Login.jsx"; 
 import Register from './components/SignUp.jsx';
 import Profile from './components/Profile.jsx';
-import Display from './components/DisplayPage.jsx';
+import Loves from './components/Love.jsx';
+// import Display from './components/DisplayPage.jsx';
 
 import Date from './components/Date.jsx'
 import DatingSurvey from './components/DatingSurvey.jsx'
@@ -18,7 +19,7 @@ import Matches from "./components/Matches.jsx";
 import { Navigate } from "react-router-dom";
 import Search from './components/Search.jsx';
 import Payment from './components/Payment.jsx';
-
+import DisplayUser from "./components/DisplayUser.jsx";
 import "./App.css";
 import Header from "./components/Header.jsx";
 import { createTheme, ThemeProvider } from "@mui/material";
@@ -67,10 +68,14 @@ const theme = createTheme({
         <Route path="/" element={<Home log={openSnackbar} />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Register />} />
+
+        <Route path="/Love" element={<DisplayUser />} />
         <Route path="/matches" element={<Matches />} />
         <Route path="/Search" element={<Search />} />
         <Route path="/Payment" element={<Payment />} />
-                <Route path="/Display" element={<Display />} />
+                {/* <Route path="/Display" element={<Display />} /> */}
+
+        <Route path="/Loves" element={<Loves />} />
 
          <Route
             path="/profile"

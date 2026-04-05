@@ -11,7 +11,26 @@ const headers = {
 }
 
 const serverRoute = (route) => `${API_IP}:${API_PORT}/${route}`;
-
+const stats = {
+    getStats: async () => {
+        let response = await fetch(serverRoute("stats"), {
+            headers,
+            method: 'GET'
+        });
+        let data = await response.json();
+        return data;
+    },
+    updateCount: async () => {
+        let response = await fetch(serverRoute("updateCount"), {
+            headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+            },
+            method: 'POST',
+        });
+        return response;
+    }
+}
 const users = {
     getUsers: async () => {
         let response = await fetch(serverRoute("users"), {
@@ -37,8 +56,8 @@ const users = {
         let data = await response.json();
         return data;
     },
-    likeUser: async (user_id, user2_id) => {
-        let response = await fetch(serverRoute("users/like/" + user_id + "-" +user2_id), {
+    likeUser: async (username, username2) => {
+        let response = await fetch(serverRoute("users/like/" + username + "-" +username2), {
             headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
@@ -47,6 +66,24 @@ const users = {
         });
         return response;
     }, 
+    blockUser: async (username, username2) => {
+        let response = await fetch(serverRoute("users/block/" + username + "-" +username2), {
+            headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+            },
+            method: 'POST',
+        });
+        return response;
+    }, 
+    getRecomendations: async (userName) => {
+        let response = await fetch(serverRoute("users/recomended/"+userName), {
+            headers,
+            method: 'GET'
+        });
+        let data = await response.json();
+        return data;
+    },
     getMatches: async (userName) => {
         let response = await fetch(serverRoute("users/likes/"+userName), {
             headers,
@@ -92,7 +129,28 @@ const users = {
         return response;
     },
 }
-
+const surveys = {
+    getSurveys: async () => {
+        let response = await fetch(serverRoute("surveys"), {
+            headers,
+            method: 'GET'
+        });
+        let data = await response.json();
+        return data;
+    },
+    postSurvey: async (user) => {
+        let response = await fetch(serverRoute("db/addsurvey"), {
+            headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            json: true, 
+            body: JSON.stringify(user),
+        });
+        return response;
+    }
+}
 const images = {
     postImage: async (image) => {
         let response = await fetch(serverRoute("db/addimage"), {
@@ -139,5 +197,7 @@ const images = {
 
 export {
     users,
-    images
+    images,
+    surveys,
+    stats
 }

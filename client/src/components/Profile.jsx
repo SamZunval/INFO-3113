@@ -12,48 +12,38 @@ import {
   Select,
   Chip
 } from "@mui/material";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import * as api from "../util/api";
+
 
 import { 
     IconButton, 
     InputAdornment 
 } from "@mui/material";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
-import * as api from "../util/api";
 
 const Profile = () => {
-   //Gets all user data 
-  const getUser = () => {
-    const stored = sessionStorage.getItem("userInfo");
-    if (!stored) return null;
+  // Form state
+  const [userName, setUserName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [city, setCity] = useState("");
+  const [career, setCareer] = useState("");
+  const [college, setCollege] = useState("");
 
-    try {
-      return JSON.parse(stored);
-    } catch {
-      return null;
-    }
-  };
-  //User information
-  const userData = getUser();
-  const [userName, setUserName] = useState(userData?.userName || "");
-  const [firstName, setFirstName] = useState(userData?.firstName || "");
-  const [lastName, setLastName] = useState(userData?.lastName || "");
-  const [email, setEmail] = useState(userData?.email || "");
-  const [city, setCity] = useState(userData?.city || "");
-  const [career, setCareer] = useState(userData?.career || "");
-  const [college, setCollege] = useState(userData?.college || "");
-
+  // Language/Skills state
   const [traits, setTraits] = useState([]);
 
-  //Password information?
-  const [currentPassword, setCurrentPassword] = useState(userData?.password || "");
+  // Password state
+  const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");        
   const [confirmPassword, setConfirmPassword] = useState(""); 
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  
+
   const [savedUser, setSavedUser] = useState(null);
 
   //Trait list and method for dealing with trait list
@@ -94,7 +84,7 @@ const passwordVisibility = (field) => {
 
     if(newPassword.length > 0 || confirmPassword.length > 0)
     {
-      if (currentPassword !== userData.password)
+      if (currentPassword !== savedUser.password)
       {
         alert("The current password you entered is incorrect. Changes not saved.");
         return;
@@ -105,7 +95,7 @@ const passwordVisibility = (field) => {
           alert("The new passwords do not match.");
           return;
         }
-        if (newPassword === userData.password) {
+        if (newPassword === savedUser.password) {
           alert("The new password cannot be the same as the current one.");
           return;
         }
@@ -114,7 +104,7 @@ const passwordVisibility = (field) => {
     }
     
     const updatedUser = {
-      ...userData,
+      ...savedUser,
       userName,
       firstName,
       lastName,
@@ -122,7 +112,7 @@ const passwordVisibility = (field) => {
       city,
       career,
       college,
-      password: newPassword ? newPassword : userData.password,
+      password: newPassword ? newPassword : savedUser.password,
       traits,
     };
 

@@ -53,9 +53,10 @@ const Header = (props) => {
          >
           <MenuItem onClick={() => handleMenuClick("/Profile")}>Profile</MenuItem>
           <MenuItem onClick={() => handleMenuClick("/Date")}>Date</MenuItem>
-          <MenuItem>Love</MenuItem>
-          <MenuItem>Member Renew/Become</MenuItem>
-          <MenuItem>Settings</MenuItem>
+          <MenuItem onClick={() => handleMenuClick("/DisplayUser")}>UserProfile</MenuItem>
+          <MenuItem onClick={() => handleMenuClick("/Search")}>Search</MenuItem>
+          <MenuItem onClick={() => handleMenuClick("/Payment")}>Payment</MenuItem>
+          <MenuItem onClick={() => handleMenuClick("/Loves")}>Love</MenuItem>
           <MenuItem>Logout</MenuItem>
 
         </Menu>
