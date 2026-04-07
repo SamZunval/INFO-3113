@@ -338,7 +338,7 @@ const retrieveImages = async (user) => {
         // Initialize the database
         context = await db.initDatabase(env.DB_URI);
 
-        images = await db.findDocuments(context, DATABASE_NAME, IMAGE_COLLECTION, {user_id: user}, {});
+        images = await db.findDocuments(context, DATABASE_NAME, IMAGE_COLLECTION, {userName: user}, {});
     }
     catch (e) {
         console.error(e);
