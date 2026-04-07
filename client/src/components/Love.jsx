@@ -18,8 +18,9 @@ const Love = () => {
           }
           loadMatches();
       }, []);
-    const handleContact = async () => {
-      await api.stats.updateCount();//todo: actualy handle hiding and unhiding div
+    const handleContact = async (email) => {
+      await api.stats.updateCount();
+      alert(email);
     }
     const handleBlock = async (username) => {
       let user = JSON.parse(sessionStorage.getItem("userInfo")).userName;
@@ -40,10 +41,6 @@ const Love = () => {
             {user.userName}
           </div>
 
-          <div key={user._id + "contact"} style={{ fontSize: "20px" }}>
-            {user.email}
-          </div>
-
           <div style={{ fontSize: "18px", marginTop: "10px" }}>
             {user.firstName} {user.lastName}
           </div>
@@ -60,7 +57,7 @@ const Love = () => {
             Birthday: {user.birthDay}
           </div>
           <Button fullWidth variant="contained" 
-                              onClick={handleContact}
+                              onClick={handleContact(user.email)}
                           >
                               Display Contact Information
           </Button>
