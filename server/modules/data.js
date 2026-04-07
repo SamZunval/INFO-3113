@@ -151,7 +151,7 @@ const blockUser = async (user_id, user2_id) => {
 
         //add like in both entries
         users = await db.updateDocument(context, DATABASE_NAME, USER_COLLECTION, {userName : user_id}, { $push: {blocks: user2_id} });
-        users = await db.updateDocument(context, DATABASE_NAME, USER_COLLECTION, {userName : user2_id}, { $push: {blocked: user1_id} });
+        users = await db.updateDocument(context, DATABASE_NAME, USER_COLLECTION, {userName : user2_id}, { $push: {blocked: user_id} });
     }
     catch (e) {
         console.error(e);
