@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import {
   TextField,
   Autocomplete,
@@ -10,13 +10,13 @@ import {
   Grid,
   Fab  
 } from '@mui/material';
-
+import * as api from "../util/api"
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
 const Search = ( ) => {
-  const mockUsers = [
-    {
+  const [mockUsers, setUsers] = useState([]);
+  /*{
       _id: '69c2b467940e9425c705361b',
       userName: 'userC',
       email: 'userC@gmail.com',
@@ -28,10 +28,14 @@ const Search = ( ) => {
       province: 'On',
       firstName: 'John',
       lastName: 'Doe'
-    }
-  ];
-
-
+    } */
+  useEffect(() => {
+          const loadUsers = async () => {
+              let result = await api.users.getUsers();
+              setUsers(result);
+          }
+          loadUsers();
+      }, []);
   const [selectedUser, setSelectedUser] = useState(null);
 
   const [usermarks, setUsermarks] = useState(() => {
@@ -45,10 +49,11 @@ const Search = ( ) => {
 
   const userLabel = (user) => {
     if (!user) return "";
-    return `${user.userName} (${user.email})`;
+    //return `${user.userName} (${user.email})`; should not display email
+    return `${user.userName}`;
   };
 
-const ClickUsermarks = () => {
+const ClickUsermarks = async () => {
     if (!selectedUser) return;
 
     setUsermarks((prev) => {
@@ -63,10 +68,12 @@ const ClickUsermarks = () => {
         // add
         updated = [...prev, selectedUser];
       }
-
+      
       localStorage.setItem("usermarks", JSON.stringify(updated));
       return updated;
     });
+    let username = JSON.parse(sessionStorage.getItem("userInfo")).userName;
+    await api.users.likeUser(username, selectedUser.userName);
   };
 
 

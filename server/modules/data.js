@@ -172,9 +172,9 @@ const likeUser = async (user_id, user2_id) => {
 
         //add like in both entries
         users = await db.updateDocument(context, DATABASE_NAME, USER_COLLECTION, {userName : user_id}, { $push: {likes: user2_id} });
-        users = await db.updateDocument(context, DATABASE_NAME, USER_COLLECTION, {userName : user2_id}, { $push: {liked: user1_id} });
+        users = await db.updateDocument(context, DATABASE_NAME, USER_COLLECTION, {userName : user2_id}, { $push: {liked: user_id} });
         //update total matches
-        let user = await db.findDocument(context, DATABASE_NAME, USER_COLLECTION, {_id : user2_id}, {});
+        let user = await db.findDocument(context, DATABASE_NAME, USER_COLLECTION, {userName : user2_id}, {});
         if(user.likes.includes(user_id)){
             let matches = await db.updateDocument(context, DATABASE_NAME, ADMIN_COLLECTION, {id : 1}, {$inc: {matches: 1}});
         } 
