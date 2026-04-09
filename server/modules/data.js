@@ -92,7 +92,7 @@ const likeUser = async (user_id, user2_id) => {
 
         //add like in both entries
         users = await db.updateDocument(context, DATABASE_NAME, USER_COLLECTION, {userName : user_id}, { $push: {likes: user2_id} });
-        users = await db.updateDocument(context, DATABASE_NAME, USER_COLLECTION, {userName : user2_id}, { $push: {liked: user1_id} });
+        users = await db.updateDocument(context, DATABASE_NAME, USER_COLLECTION, {userName : user2_id}, { $push: {liked: user_id} });
     }
     catch (e) {
         console.error(e);
@@ -142,13 +142,10 @@ const loginUser = async (userName, password) => {
         if(!user || user != {} || user != [] || Object.keys(user).length != 0|| password == user.password){
             loggedIn = user;
         }
-<<<<<<< HEAD
-=======
        
         // if (user && Object.keys(user).length > 0 && user.password === password) {
         //     return user; // Success
         // }
->>>>>>> feature/syed
     }
     catch (e) {
         console.error(e);
@@ -348,11 +345,8 @@ export {
     retrieveImage,
     likeUser,
     loginUser,
-<<<<<<< HEAD
     getMatches,
     addSurvey,
     retrieveSurveys
-=======
-    getMatches
->>>>>>> feature/syed
+    
 };

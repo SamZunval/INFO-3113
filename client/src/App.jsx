@@ -10,14 +10,10 @@ import Home from "./components/Home.jsx";
 import Login from "./components/Login.jsx"; 
 import Register from './components/SignUp.jsx';
 import Profile from './components/Profile.jsx';
-<<<<<<< HEAD
-=======
-// import Display from './components/DisplayPage.jsx';
->>>>>>> feature/syed
-
-import Date from './components/Date.jsx'
+import Date from './components/Date.jsx';
 import DatingSurvey from './components/DatingSurvey.jsx'
 import Matches from "./components/Matches.jsx";
+import Swipe from "./components/Swipe.jsx";
 import { Navigate } from "react-router-dom";
 import Search from './components/Search.jsx';
 import Payment from './components/Payment.jsx';
@@ -70,19 +66,11 @@ const theme = createTheme({
         <Route path="/" element={<Home log={openSnackbar} />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Register />} />
-<<<<<<< HEAD
         <Route path="/matches" element={<Matches />} />
+        <Route path="/swipe" element={<ProtectedRoute><Swipe /></ProtectedRoute>} />
         <Route path="/Search" element={<Search />} />
         <Route path="/Payment" element={<Payment />} />
         <Route path="/DisplayUser" element={<DisplayUser />} /> 
-=======
-
-        <Route path="/Love" element={<DisplayUser />} />
-        <Route path="/matches" element={<Matches />} />
-        <Route path="/Search" element={<Search />} />
-        <Route path="/Payment" element={<Payment />} />
-                {/* <Route path="/Display" element={<Display />} /> */}
->>>>>>> feature/syed
 
          <Route
             path="/profile"

@@ -10,34 +10,19 @@ const USER_COLLECTION = "Users";
 const extractUserInfo = async () => {
     let context = undefined;
     try {
-<<<<<<< HEAD
-        console.log(" Extracting user information from database...");
-
-        // Initialize the database connection
-        context = await db.initDatabase(env.DB_URI);
-        console.log(" Database connected successfully");
-=======
         console.log("Extracting user information from database...");
 
         // Initialize the database connection
         context = await db.initDatabase(env.DB_URI);
         console.log("Database connected successfully");
->>>>>>> feature/syed
 
         // Retrieve all users
         const users = await db.findDocuments(context, DATABASE_NAME, USER_COLLECTION, {}, {});
 
-<<<<<<< HEAD
-        console.log(` Found ${users.length} users in the database\n`);
-
-        if (users.length === 0) {
-            console.log("❌ No users found in the database");
-=======
         console.log(`Found ${users.length} users in the database\n`);
 
         if (users.length === 0) {
             console.log("No users found in the database");
->>>>>>> feature/syed
             return;
         }
 
@@ -75,11 +60,7 @@ const extractUserInfo = async () => {
         });
 
         // Summary statistics
-<<<<<<< HEAD
-        console.log(`\n Summary:`);
-=======
         console.log(`\nSummary:`);
->>>>>>> feature/syed
         console.log(`   Total Users: ${users.length}`);
         console.log(`   Users with email: ${users.filter(u => u.email).length}`);
         console.log(`   Users with birthday: ${users.filter(u => u.birthDay).length}`);
@@ -88,19 +69,11 @@ const extractUserInfo = async () => {
         console.log(`   Users with career: ${users.filter(u => u.career).length}`);
 
     } catch (error) {
-<<<<<<< HEAD
-        console.error(" Error extracting user information:", error);
-    } finally {
-        if (context) {
-            context.close();
-            console.log(" Database connection closed");
-=======
         console.error("Error extracting user information:", error);
     } finally {
         if (context) {
             context.close();
             console.log("Database connection closed");
->>>>>>> feature/syed
         }
     }
 };
@@ -111,30 +84,18 @@ const extractUserInfo = async () => {
 const extractUserByUsername = async (username) => {
     let context = undefined;
     try {
-<<<<<<< HEAD
-        console.log(`🔍 Extracting user information for: ${username}`);
-=======
         console.log(`Extracting user information for: ${username}`);
->>>>>>> feature/syed
 
         context = await db.initDatabase(env.DB_URI);
 
         const user = await db.findDocument(context, DATABASE_NAME, USER_COLLECTION, { userName: username }, {});
 
         if (!user) {
-<<<<<<< HEAD
-            console.log(` User '${username}' not found`);
-            return null;
-        }
-
-        console.log(" User Details:");
-=======
             console.log(`User '${username}' not found`);
             return null;
         }
 
         console.log("User Details:");
->>>>>>> feature/syed
         console.log(`   Username: ${user.userName || 'N/A'}`);
         console.log(`   Name: ${user.firstName || ''} ${user.lastName || ''}`.trim() || 'N/A');
         console.log(`   Email: ${user.email || 'N/A'}`);
@@ -148,11 +109,7 @@ const extractUserByUsername = async (username) => {
         return user;
 
     } catch (error) {
-<<<<<<< HEAD
-        console.error(" Error extracting user information:", error);
-=======
         console.error("Error extracting user information:", error);
->>>>>>> feature/syed
         return null;
     } finally {
         if (context) {
@@ -167,11 +124,7 @@ const extractUserByUsername = async (username) => {
 const exportUsersToJSON = async (filename = 'users_export.json') => {
     let context = undefined;
     try {
-<<<<<<< HEAD
-        console.log(` Exporting user data to ${filename}...`);
-=======
         console.log(`Exporting user data to ${filename}...`);
->>>>>>> feature/syed
 
         context = await db.initDatabase(env.DB_URI);
 
@@ -186,17 +139,10 @@ const exportUsersToJSON = async (filename = 'users_export.json') => {
         const fs = await import('fs/promises');
         await fs.writeFile(filename, JSON.stringify(sanitizedUsers, null, 2));
 
-<<<<<<< HEAD
-        console.log(` Successfully exported ${users.length} users to ${filename}`);
-
-    } catch (error) {
-        console.error(" Error exporting user data:", error);
-=======
         console.log(`Successfully exported ${users.length} users to ${filename}`);
 
     } catch (error) {
         console.error("Error exporting user data:", error);
->>>>>>> feature/syed
     } finally {
         if (context) {
             context.close();

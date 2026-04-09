@@ -22,6 +22,19 @@ const DisplayUser = ({ user: initialUser }) => {
       return;
     }
 
+    // Check if current user is logged in
+    const currentUserInfo = sessionStorage.getItem("userInfo");
+    if (currentUserInfo) {
+      try {
+        const currentUser = JSON.parse(currentUserInfo);
+        setUser(currentUser);
+        setLoading(false);
+        return;
+      } catch (parseError) {
+        console.error('Error parsing current user info:', parseError);
+      }
+    }
+
     const fetchUsers = async () => {
       setLoading(true);
       try {
