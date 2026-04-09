@@ -38,13 +38,45 @@ const handleMenuClick = (path) => {
       map.addControl(new tt.NavigationControl());
 
 
-      const marker = new tt.Marker().setLngLat([lon, lat]).addTo(map);
+      let marker = new tt.Marker().setLngLat([lon, lat]).addTo(map);
 
     
-      const popupOffset = 25;
-      const popup = new tt.Popup({ offset: popupOffset });
+      let popupOffset = 25;
+      let popup = new tt.Popup({ offset: popupOffset });
       popup.setHTML(
-        `<div id="popup">Dating locations about ${address} goes here</div>`
+        `<div id="popup">Dating locations for ${address}</div>`
+      );
+      marker.setPopup(popup);
+
+      marker = new tt.Marker().setLngLat([lon + 0.045, lat + 0.045]).addTo(map);
+      popupOffset = 10;
+      popup = new tt.Popup({ offset: popupOffset });
+      popup.setHTML(
+        `<div id="popup">Tim Hortons</div>`
+      );
+      marker.setPopup(popup);
+
+      marker = new tt.Marker().setLngLat([lon + 0.045, lat - 0.045]).addTo(map);
+      popupOffset = 10;
+      popup = new tt.Popup({ offset: popupOffset });
+      popup.setHTML(
+        `<div id="popup">Starbucks</div>`
+      );
+      marker.setPopup(popup);
+
+      marker = new tt.Marker().setLngLat([lon + 0.045, lat - 0.045]).addTo(map);
+      popupOffset = 10;
+      popup = new tt.Popup({ offset: popupOffset });
+      popup.setHTML(
+        `<div id="popup">Starbucks</div>`
+      );
+      marker.setPopup(popup);
+
+      marker = new tt.Marker().setLngLat([lon - 0.045, lat - 0.045]).addTo(map);
+      popupOffset = 10;
+      popup = new tt.Popup({ offset: popupOffset });
+      popup.setHTML(
+        `<div id="popup">${address.split(",")[0]} Theatre</div>`
       );
       marker.setPopup(popup);
     } catch (err) {
