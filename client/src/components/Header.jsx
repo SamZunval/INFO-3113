@@ -58,13 +58,12 @@ const Header = (props) => {
         }}
          >
           <MenuItem onClick={() => handleMenuClick("/Profile")}>Profile</MenuItem>
-          <MenuItem onClick={() => handleMenuClick("/swipe")}>Swipe</MenuItem>
           <MenuItem onClick={() => handleMenuClick("/Date")}>Date</MenuItem>
           <MenuItem onClick={() => handleMenuClick("/DisplayUser")}>UserProfile</MenuItem>
           <MenuItem onClick={() => handleMenuClick("/Search")}>Search</MenuItem>
           <MenuItem onClick={() => handleMenuClick("/Payment")}>Payment</MenuItem>
           <MenuItem onClick={() => handleMenuClick("/Loves")}>Matches</MenuItem>
-          <MenuItem onClick={() => handleLogout()}>Logout</MenuItem>
+         <MenuItem onClick={() => handleMenuClick("/Logout")}>Logout</MenuItem>
 
         </Menu>
       </Toolbar >

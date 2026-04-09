@@ -1,4 +1,5 @@
-import { useState,useEffect } from "react";
+
+import { useState, useEffect } from "react";
 import { 
   Paper, 
   TextField, 
@@ -12,32 +13,45 @@ import {
   Select,
   Chip
 } from "@mui/material";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import * as api from "../util/api";
-
-
+import { Avatar } from "@mui/material";
+import { useNavigate } from 'react-router-dom';
 import { 
     IconButton, 
     InputAdornment 
 } from "@mui/material";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
+import * as api from "../util/api";
 
 const Profile = () => {
-  // Form state
   const [userName, setUserName] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [birthDay, setBirthDay] = useState("");
   const [email, setEmail] = useState("");
   const [city, setCity] = useState("");
   const [career, setCareer] = useState("");
   const [college, setCollege] = useState("");
+  const [gender, setGender] = useState("");
+  const [preferGender, setPreferGender] = useState("");
+  const [image, setImage] = useState(null);
+  const [member, setMember] = useState("");
 
-  
-  // Language/Skills state
-  const [traits, setTraits] = useState([]);
 
-  // Password state
+  const navigate = useNavigate();
+
+  const language = ["Java", "Python", "C++", "JavaScript", "SQL"];
+  const [tester, setTester] = useState([]);
+const handleMultiple = (e) => {
+      const {
+         target: { value },
+      } = e;
+      setTester(
+         typeof value === "string" ? value.split(",") : value
+      );
+   };
+
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");        
   const [confirmPassword, setConfirmPassword] = useState(""); 
@@ -45,31 +59,8 @@ const Profile = () => {
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   
-
   const [savedUser, setSavedUser] = useState(null);
 
-  //Trait list and method for dealing with trait list
-  const traitsList = [
-    "Object-Oriented Thinker",
-    "Functional Programming Fan",
-    "Data Structures Expert",
-    "API Builder",
-    "Database Designer",
-    "Cloud Curious",
-    "Security Minded",
-    "Performance Optimizer",
-    "Test Driven Developer",
-    "Agile Team Player"
-  ]
-  
-  const handleMultiple = (e) => {
-      const {
-         target: { value },
-      } = e;
-      setTraits(
-         typeof value === "string" ? value.split(",") : value
-      );
-   };
   useEffect(() => {
     const user = sessionStorage.getItem("userInfo");
     if (user) {
@@ -78,19 +69,39 @@ const Profile = () => {
       setUserName(userData.userName || "");
       setFirstName(userData.firstName || "");
       setLastName(userData.lastName || "");
+      setBirthDay(userData.birthDay || "")
       setEmail(userData.email || "");
       setCity(userData.city || "");
       setCareer(userData.career || "");
       setCollege(userData.college || "");
+      setGender(userData.gender || "");
+      setPreferGender(userData.preferGender || "");
+      setMember(userData.member || "");
+      setImage(userData.profileImage || null);
     }
   }, []);
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+      if (file) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        setImage(reader.result); 
+      };
+      reader.onerror = (error) => {
+        console.error("Error reading file: ", error);
+      };
+    }
+  };
 
-const passwordVisibility = (field) => {
-  if (field === "current") setShowCurrentPassword(!showCurrentPassword);
-  if (field === "new") setShowNewPassword(!showNewPassword);
-  if (field === "confirm") setShowConfirmPassword(!showConfirmPassword);
-};
+
+
+  const passwordVisibility = (field) => {
+    if (field === "current") setShowCurrentPassword(!showCurrentPassword);
+    if (field === "new") setShowNewPassword(!showNewPassword);
+    if (field === "confirm") setShowConfirmPassword(!showConfirmPassword);
+  };
 
   const handleSave = async () => {
     if (!savedUser) {
@@ -119,18 +130,24 @@ const passwordVisibility = (field) => {
       }
 
     }
+
     
     const updatedUser = {
       ...savedUser,
       userName,
       firstName,
       lastName,
+      birthDay,
       email,
       city,
       career,
       college,
+      gender,
+      preferGender,
+      member,
       password: newPassword ? newPassword : savedUser.password,
-      traits,
+      tester,
+      profileImage: image,
     };
 
     console.log("[Profile Update] Sending updated data to server:", updatedUser);
@@ -138,9 +155,11 @@ const passwordVisibility = (field) => {
     try {
       const response = await api.users.updateUser(updatedUser);
       if (response.ok) {
+        
+         
+        
         sessionStorage.setItem("userInfo", JSON.stringify(updatedUser));
         setSavedUser(updatedUser);
-
         setCurrentPassword("");
         setNewPassword("");
         setConfirmPassword("");
@@ -159,17 +178,36 @@ const passwordVisibility = (field) => {
     <Box>
       <Paper>
         <Divider sx={{ my: 2 }} />
+
+        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", mb: 2 }}>
+          <Avatar src={image}
+                    sx={{ width: 100, height: 100, mb: 1, bgcolor: "#f680dc" }}/>
+          <Button
+            variant="outlined"
+            component="label"
+            sx={{ color: "#f680dc", borderColor: "#f680dc" }}>
+            Change Profile Photo
+            <input
+              type="file"
+              accept="image/*"
+              hidden
+              onChange={handleImageChange}
+            />
+          </Button>
+        </Box>
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
           <TextField label="Username" variant="outlined" fullWidth value={userName} 
           onChange={(e) => setUserName(e.target.value)}
           />
-
           <Box sx={{ display: "flex", gap: 2 }}>
             <TextField label="First Name" fullWidth value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
             />
             <TextField label="Last Name" fullWidth value={lastName}
               onChange={(e) => setLastName(e.target.value)}
+            />
+            <TextField label="Birht Day" fullWidth value={birthDay}
+              onChange={(e) => setBirthDay(e.target.value)}
             />
           </Box>
 
@@ -185,6 +223,35 @@ const passwordVisibility = (field) => {
           <TextField label="College" fullWidth value={college}
             onChange={(e) => setCollege(e.target.value)}
           />
+          <FormControl fullWidth>
+            <InputLabel>Gender</InputLabel>
+              <Select
+                name="gender" value={gender} onChange={(e) => setGender(e.target.value)} label="Gender">
+                  <MenuItem value="Man">Man</MenuItem>
+                  <MenuItem value="Women">Women</MenuItem>
+                  <MenuItem value="TransMan">Transgender Man</MenuItem>
+                  <MenuItem value="TransWomen">Transgender Women</MenuItem>
+              </Select>
+          </FormControl>
+
+           <FormControl fullWidth>
+            <InputLabel>Prefer Gender</InputLabel>
+              <Select
+               name="preferGender" value={preferGender} onChange={(e) => setPreferGender(e.target.value)} label="Prefer Gender">
+                  <MenuItem value="Man">Man</MenuItem>
+                  <MenuItem value="Women">Women</MenuItem>
+                  <MenuItem value="TransMan">Transgender Man</MenuItem>
+                  <MenuItem value="TransWomen">Transgender Women</MenuItem>
+              </Select>
+          </FormControl>
+          <FormControl fullWidth>
+            <InputLabel>Member</InputLabel>
+              <Select
+               name="member" value={member} onChange={(e) => setMember(e.target.value)} label="Member">
+                   <MenuItem value="Free">Free</MenuItem>
+                   <MenuItem value="Paid">Paid</MenuItem>
+              </Select>
+          </FormControl>
 
           <FormControl
                variant="standard"
@@ -196,7 +263,7 @@ const passwordVisibility = (field) => {
                </InputLabel>
                <Select
                   multiple
-                  value={traits}
+                  value={tester}
                   onChange={handleMultiple}
                   renderValue={(selLang) => (
                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
@@ -206,14 +273,24 @@ const passwordVisibility = (field) => {
                      </Box>
                   )}
                   >
-                  {traitsList.map((lang) => (
+                  {language.map((lang) => (
                      <MenuItem key={lang} value={lang}>
                         {lang}
                      </MenuItem>
                   ))}
                </Select>
             </FormControl>
-
+          
+          <Divider sx={{ my: 3 }}>
+            <Typography color="textSecondary">Be Premium!</Typography>
+          </Divider>
+           <Button 
+            fullWidth
+            variant="outlined"
+            onClick={() => navigate('/payment')}
+           sx={{ color: "#f680dc", borderColor: "#f680dc", mb: 2 }}>
+              Go to Payment Page
+          </Button>
           <Divider sx={{ my: 3 }}>
             <Typography color="textSecondary">Security & Password</Typography>
           </Divider>
