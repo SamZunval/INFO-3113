@@ -52,7 +52,7 @@ const handleMenuClick = (path) => {
       popupOffset = 10;
       popup = new tt.Popup({ offset: popupOffset });
       popup.setHTML(
-        `<div id="popup">Tim Hortons</div>`
+        `<div id="popup"><h3>Tim Hortons</h3><h3>Recommended Time: after 10am</h3></div>`
       );
       marker.setPopup(popup);
 
@@ -60,23 +60,23 @@ const handleMenuClick = (path) => {
       popupOffset = 10;
       popup = new tt.Popup({ offset: popupOffset });
       popup.setHTML(
-        `<div id="popup">Starbucks</div>`
+        `<div id="popup"><h3>Starbucks</h3><h3>Recommended Time: after 10am</h3></div>`
       );
       marker.setPopup(popup);
 
-      marker = new tt.Marker().setLngLat([lon + 0.045, lat - 0.045]).addTo(map);
+      marker = new tt.Marker().setLngLat([lon - 0.035, lat + 0.055]).addTo(map);
       popupOffset = 10;
       popup = new tt.Popup({ offset: popupOffset });
       popup.setHTML(
-        `<div id="popup">Starbucks</div>`
+        `<div id="popup"><h3>City Park</h3><h3>Recommended Time: whenever</h3></div>`
       );
       marker.setPopup(popup);
 
-      marker = new tt.Marker().setLngLat([lon - 0.045, lat - 0.045]).addTo(map);
+      marker = new tt.Marker().setLngLat([lon - 0.055, lat - 0.05]).addTo(map);
       popupOffset = 10;
       popup = new tt.Popup({ offset: popupOffset });
       popup.setHTML(
-        `<div id="popup">${address.split(",")[0]} Theatre</div>`
+        `<div id="popup"><h3>${address.split(",")[0]} Theatre</h3><h3>Recommended Time: after 5pm</h3></div>`
       );
       marker.setPopup(popup);
     } catch (err) {
