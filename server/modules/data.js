@@ -204,6 +204,12 @@ const getMatches = async (userName) => {
             if(users.blocked != null && users.blocks != null){
                 match = users.likes.filter(element => users.liked.includes(element) && !users.blocked.includes(element) && !users.blocks.includes(element));
             }
+            else if( users.blocks != null){
+                match = users.likes.filter(element => users.liked.includes(element) && !users.blocks.includes(element));
+            }
+            else if(users.blocked != null){
+                match = users.likes.filter(element => users.liked.includes(element) && !users.blocked.includes(element));
+            }
             else {
                 match = users.likes.filter(element => users.liked.includes(element));
             }
