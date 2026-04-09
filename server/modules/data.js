@@ -200,7 +200,13 @@ const getMatches = async (userName) => {
         users = await db.findDocument(context, DATABASE_NAME, USER_COLLECTION, { userName: userName}, {});
 
         if(users.likes != null && users.liked != null){
-            let match = users.likes.filter(element => users.liked.includes(element) && !users.blocked.includes(element) && !user.blocks.includes(element));
+            let match = [];
+            if(users.blocked != null && users.blocks != null){
+                match = users.likes.filter(element => users.liked.includes(element) && !users.blocked.includes(element) && !users.blocks.includes(element));
+            }
+            else {
+                match = users.likes.filter(element => users.liked.includes(element));
+            }
             matches = await db.findDocuments(context, DATABASE_NAME, USER_COLLECTION, {userName : {$in : match}}, {});
         }
     }

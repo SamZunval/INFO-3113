@@ -17,7 +17,8 @@ import {  retrieveUsers,
     loginUser,
     getMatches,
     addSurvey,
-    retrieveSurveys} from './data.js';
+    retrieveSurveys,
+    updateCount} from './data.js';
 
 import * as colors from "./colors.js";
 import * as data from "./messager.js";

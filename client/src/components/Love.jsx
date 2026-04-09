@@ -2,7 +2,8 @@ import {useState,useEffect } from "react";
 import {
   Paper,
   Box,
-  Typography
+  Typography,
+  Button
 } from "@mui/material";
 import * as api from "../util/api"; 
 
@@ -57,12 +58,12 @@ const Love = () => {
             Birthday: {user.birthDay}
           </div>
           <Button fullWidth variant="contained" 
-                              onClick={handleContact(user.email)}
+                              onClick={() => {handleContact(user.email)}}
                           >
                               Display Contact Information
           </Button>
           <Button fullWidth variant="contained" 
-                              onClick={handleBlock(user.userName)}
+                              onClick={() =>{handleBlock(user.userName)}}
                           >
                               Block user
           </Button>
