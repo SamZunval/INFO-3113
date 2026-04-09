@@ -87,10 +87,10 @@ const handleMenuClick = (path) => {
   return (
     <div style={{ textAlign: "center", marginTop: "1rem" }}>
     <h1 style={{ fontSize: "2.5rem", fontWeight: "700", color: "#f680dc" }}>
-    Date Going On
+    Date Location Picker
     </h1>
     <div style={{ fontSize: "1.25rem",color: "#f680dc" }}>
-    Find recommended dating locations
+    Find recommended date locations
     </div>
    
 
