@@ -167,7 +167,6 @@ const DisplayUser = ({ user: initialUser }) => {
             Details
           </Typography>
           <Typography variant="body2" sx={{ color: '#333', mb: 0.25 }}>Username: {user.userName || 'N/A'}</Typography>
-          <Typography variant="body2" sx={{ color: '#333', mb: 0.25 }}>Email: {user.email || 'N/A'}</Typography>
           <Typography variant="body2" sx={{ color: '#333', mb: 0.25 }}>Address: {user.address || 'N/A'}</Typography>
           <Typography variant="body2" sx={{ color: '#333', mb: 0.25 }}>City / Province: {[user.city, user.province].filter(Boolean).join(' / ') || 'N/A'}</Typography>
           <Typography variant="body2" sx={{ color: '#333', mb: 0.25 }}>Postal Code: {user.postalCode || 'N/A'}</Typography>
