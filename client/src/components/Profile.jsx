@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { 
   Paper, 
   TextField, 
@@ -33,13 +33,10 @@ const Profile = () => {
   const [career, setCareer] = useState("");
   const [college, setCollege] = useState("");
 
-<<<<<<< HEAD
   
-=======
   // Language/Skills state
   const [traits, setTraits] = useState([]);
 
->>>>>>> 00f751d357a0c2941d95157bf80e8e9810ad54e4
   // Password state
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");        
@@ -47,12 +44,7 @@ const Profile = () => {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-<<<<<<< HEAD
   
-  const language = ["Java", "Python", "C++", "JavaScript", "SQL"];
-  const [tester, setTester] = useState([]);
-const handleMultiple = (e) => {
-=======
 
   const [savedUser, setSavedUser] = useState(null);
 
@@ -71,7 +63,6 @@ const handleMultiple = (e) => {
   ]
   
   const handleMultiple = (e) => {
->>>>>>> 00f751d357a0c2941d95157bf80e8e9810ad54e4
       const {
          target: { value },
       } = e;
@@ -79,11 +70,6 @@ const handleMultiple = (e) => {
          typeof value === "string" ? value.split(",") : value
       );
    };
-
-<<<<<<< HEAD
-  
-  const [savedUser, setSavedUser] = useState(null);
-
   useEffect(() => {
     const user = sessionStorage.getItem("userInfo");
     if (user) {
@@ -99,9 +85,7 @@ const handleMultiple = (e) => {
     }
   }, []);
 
-=======
 
->>>>>>> 00f751d357a0c2941d95157bf80e8e9810ad54e4
 const passwordVisibility = (field) => {
   if (field === "current") setShowCurrentPassword(!showCurrentPassword);
   if (field === "new") setShowNewPassword(!showNewPassword);
@@ -109,15 +93,12 @@ const passwordVisibility = (field) => {
 };
 
   const handleSave = async () => {
-<<<<<<< HEAD
     if (!savedUser) {
       alert("No user session found.");
       return;
     }
 
     
-=======
->>>>>>> 00f751d357a0c2941d95157bf80e8e9810ad54e4
     if(newPassword.length > 0 || confirmPassword.length > 0)
     {
       if (currentPassword !== savedUser.password)
