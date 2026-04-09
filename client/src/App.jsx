@@ -10,14 +10,10 @@ import Home from "./components/Home.jsx";
 import Login from "./components/Login.jsx"; 
 import Register from './components/SignUp.jsx';
 import Profile from './components/Profile.jsx';
-<<<<<<< HEAD
-import Date from './components/Date.jsx';
-=======
 import Loves from './components/Love.jsx';
 // import Display from './components/DisplayPage.jsx';
 
 import Date from './components/Date.jsx'
->>>>>>> 00f751d357a0c2941d95157bf80e8e9810ad54e4
 import DatingSurvey from './components/DatingSurvey.jsx'
 import Matches from "./components/Matches.jsx";
 import Swipe from "./components/Swipe.jsx";
@@ -73,19 +69,9 @@ const theme = createTheme({
         <Route path="/" element={<Home log={openSnackbar} />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Register />} />
-<<<<<<< HEAD
-        <Route path="/matches" element={<Matches />} />
         <Route path="/swipe" element={<ProtectedRoute><Swipe /></ProtectedRoute>} />
-        <Route path="/Search" element={<Search />} />
-        <Route path="/Payment" element={<Payment />} />
-        <Route path="/DisplayUser" element={<DisplayUser />} /> 
-=======
-        <Route path="/payment" element={<Payment />} />
-
->>>>>>> 00f751d357a0c2941d95157bf80e8e9810ad54e4
 
         <Route path="/Love" element={<ProtectedRoute><DisplayUser /></ProtectedRoute>} />
-        <Route path="/matches" element={<ProtectedRoute><Matches /></ProtectedRoute>} />
         <Route path="/Search" element={<ProtectedRoute><Search /></ProtectedRoute>} />
         <Route path="/Payment" element={<ProtectedRoute><Payment /></ProtectedRoute>} />
         <Route path="/DisplayUser" element={<ProtectedRoute><DisplayUser /></ProtectedRoute>} />

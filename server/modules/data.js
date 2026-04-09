@@ -126,11 +126,22 @@ const retrieveRecomendedMatches = async (username) => {
     let users = [];
 
     let context = undefined;
+    let arr = [];
     try {
         // Initialize the database
         context = await db.initDatabase(env.DB_URI);
         let user = await db.findDocument(context, DATABASE_NAME, USER_COLLECTION, { userName: username}, {});
-        users = await db.findDocuments(context, DATABASE_NAME, USER_COLLECTION, {userName: {$nin: [...user.blocks,...user.blocked,...user.likes,username]}, gender: user.preferGender, member: "Paid"}, {});
+        arr.push(username);
+        if(user.blocks != null){
+            arr.push(...user.blocks);
+        }
+        if(user.blocked != null){
+            arr.push(...user.blocked);
+        }
+        if(user.likes != null){
+            arr.push(...user.likes);
+        }
+        users = await db.findDocuments(context, DATABASE_NAME, USER_COLLECTION, {userName: {$nin: arr}, gender: user.preferGender, member: "Paid"}, {});
     }
     catch (e) {
         console.error(e);
@@ -173,14 +184,13 @@ const likeUser = async (user_id, user2_id) => {
         //add like in both entries
         users = await db.updateDocument(context, DATABASE_NAME, USER_COLLECTION, {userName : user_id}, { $push: {likes: user2_id} });
         users = await db.updateDocument(context, DATABASE_NAME, USER_COLLECTION, {userName : user2_id}, { $push: {liked: user_id} });
-<<<<<<< HEAD
-=======
         //update total matches
         let user = await db.findDocument(context, DATABASE_NAME, USER_COLLECTION, {userName : user2_id}, {});
-        if(user.likes.includes(user_id)){
-            let matches = await db.updateDocument(context, DATABASE_NAME, ADMIN_COLLECTION, {id : 1}, {$inc: {matches: 1}});
-        } 
->>>>>>> 00f751d357a0c2941d95157bf80e8e9810ad54e4
+        if(user.likes != null){        
+            if(user.likes.includes(user_id)){
+                let matches = await db.updateDocument(context, DATABASE_NAME, ADMIN_COLLECTION, {id : 1}, {$inc: {matches: 1}});
+            } 
+        }
     }
     catch (e) {
         console.error(e);
@@ -242,13 +252,6 @@ const loginUser = async (userName, password) => {
         if(user && user != {} && user != [] && Object.keys(user).length != 0 && password == user.password){
             loggedIn = user;
         }
-<<<<<<< HEAD
-       
-        // if (user && Object.keys(user).length > 0 && user.password === password) {
-        //     return user; // Success
-        // }
-=======
->>>>>>> 00f751d357a0c2941d95157bf80e8e9810ad54e4
     }
     catch (e) {
         console.error(e);
@@ -450,14 +453,9 @@ export {
     loginUser,
     getMatches,
     addSurvey,
-<<<<<<< HEAD
-    retrieveSurveys
-    
-=======
     retrieveSurveys,
     blockUser,
     retrieveRecomendedMatches,
     updateCount,
     retrieveStats
->>>>>>> 00f751d357a0c2941d95157bf80e8e9810ad54e4
 };

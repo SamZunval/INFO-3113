@@ -40,8 +40,13 @@ const Login = (props) => {
                 sessionStorage.setItem("userInfo", JSON.stringify(loggedInUser));
 
                console.log(`[Login Success] Welcome back, ${loggedInUser.firstName}!`, loggedInUser);
-
-                navigate('/profile');
+                
+                if(loggedInUser.member == "Paid"){
+                    navigate('/swipe');
+                }
+                else {
+                    navigate('/profile');
+                }
     
             } catch (err) {
                 console.error("Login error:", err);

@@ -43,7 +43,7 @@ const Swipe = () => {
 
     const loadProfiles = async () => {
       try {
-        const users = await api.users.getUsers();
+        const users = await api.users.getRecomendations(currentUser.userName);
 
         const filtered = users
           .filter((user) =>
@@ -94,8 +94,13 @@ const Swipe = () => {
     }
   };
 
-  const handleReject = (userName) => {
+  const handleReject = async (userName) => {
     setProfiles((prev) => prev.filter((profile) => profile.userName !== userName));
+    try {
+        await api.users.blockUser(JSON.parse(sessionStorage.getItem("userInfo") || "{}").userName, userName);
+    } catch (err) {
+      console.warn("Block request failed", err);
+    }
     const currentUser = JSON.parse(sessionStorage.getItem("userInfo") || "{}");
     const userNameKey = currentUser.userName;
     if (userNameKey) {
@@ -182,7 +187,6 @@ const Swipe = () => {
                   {profileBio(profile) || "No bio available yet."}
                 </Typography>
                 <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
-                  {profile.email && <Chip label={profile.email} color="primary" />}
                   {profile.city && <Chip label={profile.city} />}
                   {profile.career && <Chip label={profile.career} />}
                 </Box>

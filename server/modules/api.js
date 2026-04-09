@@ -18,14 +18,10 @@ import {  retrieveUsers,
     getMatches,
     addSurvey,
     retrieveSurveys,
-<<<<<<< HEAD
-  } from './data.js';
-=======
     blockUser,
     retrieveRecomendedMatches,
     updateCount,
     retrieveStats} from './data.js';
->>>>>>> 00f751d357a0c2941d95157bf80e8e9810ad54e4
 
 import * as colors from "./colors.js";
 import * as data from "./messager.js";
