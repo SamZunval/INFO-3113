@@ -12,7 +12,7 @@ import Register from './components/SignUp.jsx';
 import Profile from './components/Profile.jsx';
 import Loves from './components/Love.jsx';
 // import Display from './components/DisplayPage.jsx';
-
+import Dashboard from "./components/Dashboard.jsx";
 import Date from './components/Date.jsx'
 import DatingSurvey from './components/DatingSurvey.jsx'
 import Matches from "./components/Matches.jsx";
@@ -31,6 +31,21 @@ import { createTheme, ThemeProvider } from "@mui/material";
           return <Navigate to="/signup" replace />;
       }
 
+      return children;
+  };
+
+  const ManagerRoute = ({ children }) => {
+      if (!sessionStorage.getItem("userInfo")) {
+          alert("Please log in to access this page.");
+          return <Navigate to="/signup" replace />;
+      }
+      else{
+        let user = JSON.parse(sessionStorage.getItem("userInfo"));
+        if(user.member !== "Admin"){
+          alert("This page is admin only!");
+          return <Navigate to="/profile" replace />;
+        }
+      }
       return children;
   };
 
@@ -81,7 +96,7 @@ const theme = createTheme({
         <Route path="/date" element={<ProtectedRoute><Date /></ProtectedRoute>} />
 
         <Route path="/DatingSurvey" element={<ProtectedRoute><DatingSurvey /></ProtectedRoute>} />
-        
+        <Route path="/Dashboard" element={<ManagerRoute><Dashboard /></ManagerRoute>} />
       </Routes>
       <div className="background"></div>
 

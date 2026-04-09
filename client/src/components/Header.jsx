@@ -31,7 +31,24 @@ const Header = (props) => {
     navigate(path);
     setAnchor(null); 
   };
-
+  const adminOnly = () => {
+    if (!sessionStorage.getItem("userInfo")) {
+      return false;
+    }
+    if(JSON.parse(sessionStorage.getItem("userInfo")).member === "Admin"){
+      return true;
+    }
+    return false
+  }
+  const paidOnly = () => {
+    if (!sessionStorage.getItem("userInfo")) {
+      return false;
+    }
+    if(JSON.parse(sessionStorage.getItem("userInfo")).member === "Paid"){
+      return true;
+    }
+    return false
+  }
   const handleLogout = () => {
     sessionStorage.clear(); // removes EVERYTHING from session storage
     setAnchor(null);
@@ -58,12 +75,24 @@ const Header = (props) => {
         }}
          >
           <MenuItem onClick={() => handleMenuClick("/Profile")}>Profile</MenuItem>
+          {paidOnly() &&
           <MenuItem onClick={() => handleMenuClick("/swipe")}>Swipe</MenuItem>
+          }
+          {paidOnly() &&
           <MenuItem onClick={() => handleMenuClick("/Date")}>Date</MenuItem>
+          }
           <MenuItem onClick={() => handleMenuClick("/DisplayUser")}>UserProfile</MenuItem>
+          {paidOnly() &&
           <MenuItem onClick={() => handleMenuClick("/Search")}>Search</MenuItem>
+          }
           <MenuItem onClick={() => handleMenuClick("/Payment")}>Payment</MenuItem>
+          {paidOnly() &&
           <MenuItem onClick={() => handleMenuClick("/Loves")}>Matches</MenuItem>
+          }
+
+          {adminOnly() &&
+            <MenuItem onClick={() => handleMenuClick("/Dashboard")}>Management Dashboard</MenuItem>
+          }
           <MenuItem onClick={() => handleLogout()}>Logout</MenuItem>
 
         </Menu>

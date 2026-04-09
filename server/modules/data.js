@@ -22,7 +22,7 @@ const retrieveStats = async () => {
         stats.numFree = users.length;
         stats.numPaid = members.length;
         stats.matches = counts.matches;
-        stats.revealedData = revealedData;
+        stats.revealedData = counts.revealedData;
     }
     catch (e) {
         console.error(e);
