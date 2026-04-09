@@ -42,7 +42,7 @@ const replaceDocument = (context, database, collection, criteria,  change) => {
     return context.db(database).collection(collection).replaceOne(criteria, change, {});
 }
 const updateDocument = (context, database, collection, criteria,  change) => {
-    return context.db(database).collection(collection).update(criteria, change);
+    return context.db(database).collection(collection).updateOne(criteria, change);
 }
 export {
     initDatabase,

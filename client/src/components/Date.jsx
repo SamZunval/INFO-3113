@@ -38,13 +38,45 @@ const handleMenuClick = (path) => {
       map.addControl(new tt.NavigationControl());
 
 
-      const marker = new tt.Marker().setLngLat([lon, lat]).addTo(map);
+      let marker = new tt.Marker().setLngLat([lon, lat]).addTo(map);
 
     
-      const popupOffset = 25;
-      const popup = new tt.Popup({ offset: popupOffset });
+      let popupOffset = 25;
+      let popup = new tt.Popup({ offset: popupOffset });
       popup.setHTML(
-        `<div id="popup">Dating locations about ${address} goes here</div>`
+        `<div id="popup">Dating locations for ${address}</div>`
+      );
+      marker.setPopup(popup);
+
+      marker = new tt.Marker().setLngLat([lon + 0.045, lat + 0.045]).addTo(map);
+      popupOffset = 10;
+      popup = new tt.Popup({ offset: popupOffset });
+      popup.setHTML(
+        `<div id="popup"><h3>Tim Hortons</h3><h3>Recommended Time: after 10am</h3></div>`
+      );
+      marker.setPopup(popup);
+
+      marker = new tt.Marker().setLngLat([lon + 0.045, lat - 0.045]).addTo(map);
+      popupOffset = 10;
+      popup = new tt.Popup({ offset: popupOffset });
+      popup.setHTML(
+        `<div id="popup"><h3>Starbucks</h3><h3>Recommended Time: after 10am</h3></div>`
+      );
+      marker.setPopup(popup);
+
+      marker = new tt.Marker().setLngLat([lon - 0.035, lat + 0.055]).addTo(map);
+      popupOffset = 10;
+      popup = new tt.Popup({ offset: popupOffset });
+      popup.setHTML(
+        `<div id="popup"><h3>City Park</h3><h3>Recommended Time: whenever</h3></div>`
+      );
+      marker.setPopup(popup);
+
+      marker = new tt.Marker().setLngLat([lon - 0.055, lat - 0.05]).addTo(map);
+      popupOffset = 10;
+      popup = new tt.Popup({ offset: popupOffset });
+      popup.setHTML(
+        `<div id="popup"><h3>${address.split(",")[0]} Theatre</h3><h3>Recommended Time: after 5pm</h3></div>`
       );
       marker.setPopup(popup);
     } catch (err) {
@@ -55,10 +87,10 @@ const handleMenuClick = (path) => {
   return (
     <div style={{ textAlign: "center", marginTop: "1rem" }}>
     <h1 style={{ fontSize: "2.5rem", fontWeight: "700", color: "#f680dc" }}>
-    Date Going On
+    Date Location Picker
     </h1>
     <div style={{ fontSize: "1.25rem",color: "#f680dc" }}>
-    Find recommended dating locations
+    Find recommended date locations
     </div>
    
 

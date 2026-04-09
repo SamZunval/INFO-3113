@@ -1,5 +1,4 @@
-
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { 
   Paper, 
   TextField, 
@@ -34,7 +33,13 @@ const Profile = () => {
   const [career, setCareer] = useState("");
   const [college, setCollege] = useState("");
 
+<<<<<<< HEAD
   
+=======
+  // Language/Skills state
+  const [traits, setTraits] = useState([]);
+
+>>>>>>> 00f751d357a0c2941d95157bf80e8e9810ad54e4
   // Password state
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");        
@@ -42,18 +47,40 @@ const Profile = () => {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+<<<<<<< HEAD
   
   const language = ["Java", "Python", "C++", "JavaScript", "SQL"];
   const [tester, setTester] = useState([]);
 const handleMultiple = (e) => {
+=======
+
+  const [savedUser, setSavedUser] = useState(null);
+
+  //Trait list and method for dealing with trait list
+  const traitsList = [
+    "Object-Oriented Thinker",
+    "Functional Programming Fan",
+    "Data Structures Expert",
+    "API Builder",
+    "Database Designer",
+    "Cloud Curious",
+    "Security Minded",
+    "Performance Optimizer",
+    "Test Driven Developer",
+    "Agile Team Player"
+  ]
+  
+  const handleMultiple = (e) => {
+>>>>>>> 00f751d357a0c2941d95157bf80e8e9810ad54e4
       const {
          target: { value },
       } = e;
-      setTester(
+      setTraits(
          typeof value === "string" ? value.split(",") : value
       );
    };
 
+<<<<<<< HEAD
   
   const [savedUser, setSavedUser] = useState(null);
 
@@ -72,6 +99,9 @@ const handleMultiple = (e) => {
     }
   }, []);
 
+=======
+
+>>>>>>> 00f751d357a0c2941d95157bf80e8e9810ad54e4
 const passwordVisibility = (field) => {
   if (field === "current") setShowCurrentPassword(!showCurrentPassword);
   if (field === "new") setShowNewPassword(!showNewPassword);
@@ -79,12 +109,15 @@ const passwordVisibility = (field) => {
 };
 
   const handleSave = async () => {
+<<<<<<< HEAD
     if (!savedUser) {
       alert("No user session found.");
       return;
     }
 
     
+=======
+>>>>>>> 00f751d357a0c2941d95157bf80e8e9810ad54e4
     if(newPassword.length > 0 || confirmPassword.length > 0)
     {
       if (currentPassword !== savedUser.password)
@@ -105,7 +138,6 @@ const passwordVisibility = (field) => {
       }
 
     }
-
     
     const updatedUser = {
       ...savedUser,
@@ -117,7 +149,7 @@ const passwordVisibility = (field) => {
       career,
       college,
       password: newPassword ? newPassword : savedUser.password,
-      tester,
+      traits,
     };
 
     console.log("[Profile Update] Sending updated data to server:", updatedUser);
@@ -183,7 +215,7 @@ const passwordVisibility = (field) => {
                </InputLabel>
                <Select
                   multiple
-                  value={tester}
+                  value={traits}
                   onChange={handleMultiple}
                   renderValue={(selLang) => (
                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
@@ -193,7 +225,7 @@ const passwordVisibility = (field) => {
                      </Box>
                   )}
                   >
-                  {language.map((lang) => (
+                  {traitsList.map((lang) => (
                      <MenuItem key={lang} value={lang}>
                         {lang}
                      </MenuItem>

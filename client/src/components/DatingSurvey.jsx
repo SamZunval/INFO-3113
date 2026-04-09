@@ -12,8 +12,8 @@ import {
 import Rating from "@mui/material/Rating";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-
-
+import * as api from "../util/api"
+import { useNavigate } from "react-router-dom";
 
 
 const Survey = (props) => {
@@ -22,6 +22,7 @@ const Survey = (props) => {
         const [rating, setRating] = useState(0);
         const [nextDate, setNextDate] = useState(""); 
             
+   const navigate = useNavigate();
    
     
     return (
@@ -52,7 +53,7 @@ const Survey = (props) => {
           </Box>
   
 
-               <Button fullWidth variant="contained"  disabled={!dateName || !location || rating === 0 || !nextDate} onClick={() => props.joinRoom({ dateName, location })}>
+               <Button fullWidth variant="contained"  disabled={!dateName || !location || rating === 0 || !nextDate} onClick={() => {api.surveys.postSurvey({ dateName, location,rating, nextDate}), navigate("/Date")}}>
              Submit </Button>
 
             </CardContent>

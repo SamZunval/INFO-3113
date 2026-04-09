@@ -23,14 +23,20 @@ const Header = (props) => {
  const [anchor, setAnchor] = useState(null);
 
  const handleMenuClick = (path) => {
-  if (!sessionStorage.getItem("userInfo")) {
-    alert("Please log in to access this page.");
+    if (!sessionStorage.getItem("userInfo")) {
+      alert("Please log in to access this page.");
+      setAnchor(null);
+      return;
+    }
+    navigate(path);
+    setAnchor(null); 
+  };
+
+  const handleLogout = () => {
+    sessionStorage.clear(); // removes EVERYTHING from session storage
     setAnchor(null);
-    return;
-  }
-  navigate(path);
-  setAnchor(null); 
-};
+    navigate("/login"); 
+  };
 
  const navigate = useNavigate();
 
@@ -55,10 +61,10 @@ const Header = (props) => {
           <MenuItem onClick={() => handleMenuClick("/swipe")}>Swipe</MenuItem>
           <MenuItem onClick={() => handleMenuClick("/Date")}>Date</MenuItem>
           <MenuItem onClick={() => handleMenuClick("/DisplayUser")}>UserProfile</MenuItem>
-          <MenuItem>Love</MenuItem>
-          <MenuItem>Member Renew/Become</MenuItem>
-          <MenuItem>Settings</MenuItem>
-          <MenuItem>Logout</MenuItem>
+          <MenuItem onClick={() => handleMenuClick("/Search")}>Search</MenuItem>
+          <MenuItem onClick={() => handleMenuClick("/Payment")}>Payment</MenuItem>
+          <MenuItem onClick={() => handleMenuClick("/Loves")}>Matches</MenuItem>
+          <MenuItem onClick={() => handleLogout()}>Logout</MenuItem>
 
         </Menu>
       </Toolbar >

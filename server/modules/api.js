@@ -18,7 +18,14 @@ import {  retrieveUsers,
     getMatches,
     addSurvey,
     retrieveSurveys,
+<<<<<<< HEAD
   } from './data.js';
+=======
+    blockUser,
+    retrieveRecomendedMatches,
+    updateCount,
+    retrieveStats} from './data.js';
+>>>>>>> 00f751d357a0c2941d95157bf80e8e9810ad54e4
 
 import * as colors from "./colors.js";
 import * as data from "./messager.js";
@@ -41,6 +48,21 @@ app.use((req, _res, next) => {
     next();
 });
 // Endpoint Definitions
+//stats
+app.get('/stats', async (_request, response) => {
+    let users = await retrieveStats();
+    response.json(users);
+});
+app.post('/updateCount', async (_request, response) => {
+    try {
+        await updateCount();
+        response.sendStatus(200);
+    }
+    catch (e) {
+        console.error(e);
+        response.sendStatus(500);
+    }
+});
 //surveys
 app.get('/surveys', async (_request, response) => {
     let users = await retrieveSurveys();
@@ -67,6 +89,11 @@ app.get('/users/:what', async (_request, response) => {
     let users = await retrieveUser(user_id);
     response.json(users);
 });
+app.get('/users/recomended/:what', async (_request, response) => {
+    const user_id = _request.params.what;
+    let users = await retrieveRecomendedMatches(user_id);
+    response.json(users);
+});
 app.get('/users/login/:username-:password', async (_request, response) => {
     try {
         const username_id = _request.params.username;
@@ -90,6 +117,18 @@ app.post('/users/like/:liker-:liked', async (_request, response) => {
         const liker = _request.params.liker;
         const liked = _request.params.liked;
         await likeUser(liker,liked);
+        response.sendStatus(200);
+    }
+    catch (e) {
+        console.error(e);
+        response.sendStatus(500);
+    }
+});
+app.post('/users/block/:liker-:liked', async (_request, response) => {
+    try {
+        const liker = _request.params.liker;
+        const liked = _request.params.liked;
+        await blockUser(liker,liked);
         response.sendStatus(200);
     }
     catch (e) {
