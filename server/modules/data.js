@@ -141,7 +141,13 @@ const retrieveRecomendedMatches = async (username) => {
         if(user.likes != null){
             arr.push(...user.likes);
         }
+        //users = await db.findDocuments(context, DATABASE_NAME, USER_COLLECTION, {userName: {$nin: arr}}, {});
         users = await db.findDocuments(context, DATABASE_NAME, USER_COLLECTION, {userName: {$nin: arr}, gender: user.preferGender, member: "Paid"}, {});
+        //allow filtering by user prefered language
+        if(user.preferLang != null && (Array.isArray(user.preferLang) && user.preferLang.length > 0)){
+            const target = users.map((use) => ({use, size: ((Array.isArray(use.tester) && use.tester.length > 0 && use.tester !== undefined) ? (new Set([...use.tester, ...user.preferLang]).size) : -1)})).sort((b, a) => a.size - b.size);
+            users = target.map(({use,size})=>use);
+        }
     }
     catch (e) {
         console.error(e);

@@ -43,6 +43,7 @@ const Profile = () => {
 
   const language = ["Java", "Python", "C++", "JavaScript", "SQL"];
   const [tester, setTester] = useState([]);
+  const [preferLang, setPreferLang] = useState([]);
 const handleMultiple = (e) => {
       const {
          target: { value },
@@ -51,7 +52,14 @@ const handleMultiple = (e) => {
          typeof value === "string" ? value.split(",") : value
       );
    };
-
+   const handleLanguagePref = (e) => {
+      const {
+         target: { value },
+      } = e;
+      setPreferLang(
+         typeof value === "string" ? value.split(",") : value
+      );
+   };
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");        
   const [confirmPassword, setConfirmPassword] = useState(""); 
@@ -147,6 +155,7 @@ const handleMultiple = (e) => {
       member,
       password: newPassword ? newPassword : savedUser.password,
       tester,
+      preferLang,
       profileImage: image,
     };
 
@@ -259,7 +268,7 @@ const handleMultiple = (e) => {
                sx={{ m: 1, minWidth: 120 }}
                >
                <InputLabel id="select" label="Lang">
-                  Select
+                  Select languages
                </InputLabel>
                <Select
                   multiple
@@ -280,7 +289,33 @@ const handleMultiple = (e) => {
                   ))}
                </Select>
             </FormControl>
-          
+          <FormControl
+               variant="standard"
+               size="large"
+               sx={{ m: 1, minWidth: 120 }}
+               >
+               <InputLabel id="select" label="Lang">
+                  Select prefered languages
+               </InputLabel>
+               <Select
+                  multiple
+                  value={preferLang}
+                  onChange={handleLanguagePref}
+                  renderValue={(selLang) => (
+                     <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                        {selLang.map((value) => (
+                           <Chip key={value} color="#FFC0CB" label={value} />
+                        ))}
+                     </Box>
+                  )}
+                  >
+                  {language.map((lang) => (
+                     <MenuItem key={lang} value={lang}>
+                        {lang}
+                     </MenuItem>
+                  ))}
+               </Select>
+            </FormControl>
           <Divider sx={{ my: 3 }}>
             <Typography color="textSecondary">Be Premium!</Typography>
           </Divider>
