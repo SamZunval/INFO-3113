@@ -42,13 +42,13 @@ const Profile = () => {
   const navigate = useNavigate();
 
   const language = ["Java", "Python", "C++", "JavaScript", "SQL"];
-  const [tester, setTester] = useState([]);
+  const [traits, settraits] = useState([]);
   const [preferLang, setPreferLang] = useState([]);
 const handleMultiple = (e) => {
       const {
          target: { value },
       } = e;
-      setTester(
+      settraits(
          typeof value === "string" ? value.split(",") : value
       );
    };
@@ -154,7 +154,7 @@ const handleMultiple = (e) => {
       preferGender,
       member,
       password: newPassword ? newPassword : savedUser.password,
-      tester,
+      traits,
       preferLang,
       profileImage: image,
     };
@@ -272,7 +272,7 @@ const handleMultiple = (e) => {
                </InputLabel>
                <Select
                   multiple
-                  value={tester}
+                  value={traits}
                   onChange={handleMultiple}
                   renderValue={(selLang) => (
                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
