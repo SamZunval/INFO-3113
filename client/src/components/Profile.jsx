@@ -44,6 +44,7 @@ const Profile = () => {
   const language = ["Java", "Python", "C++", "JavaScript", "SQL"];
   const [traits, settraits] = useState([]);
   const [preferLang, setPreferLang] = useState([]);
+  
 const handleMultiple = (e) => {
       const {
          target: { value },
@@ -52,6 +53,7 @@ const handleMultiple = (e) => {
          typeof value === "string" ? value.split(",") : value
       );
    };
+
    const handleLanguagePref = (e) => {
       const {
          target: { value },
@@ -60,6 +62,7 @@ const handleMultiple = (e) => {
          typeof value === "string" ? value.split(",") : value
       );
    };
+
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");        
   const [confirmPassword, setConfirmPassword] = useState(""); 
@@ -91,19 +94,33 @@ const handleMultiple = (e) => {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-      if (file) {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        setImage(reader.result); 
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const img = new Image();
+      img.src = event.target.result;
+
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+
+        const MAX_WIDTH = 180; // was 300
+        const scale = MAX_WIDTH / img.width;
+
+        canvas.width = MAX_WIDTH;
+        canvas.height = img.height * scale;
+
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+        const compressedBase64 = canvas.toDataURL("image/jpeg", 0.4); 
+
+        setImage(compressedBase64);
       };
-      reader.onerror = (error) => {
-        console.error("Error reading file: ", error);
-      };
-    }
+    };
+
+    reader.readAsDataURL(file);
   };
-
-
 
   const passwordVisibility = (field) => {
     if (field === "current") setShowCurrentPassword(!showCurrentPassword);
@@ -138,7 +155,6 @@ const handleMultiple = (e) => {
       }
 
     }
-
     
     const updatedUser = {
       ...savedUser,
@@ -165,8 +181,6 @@ const handleMultiple = (e) => {
       const response = await api.users.updateUser(updatedUser);
       if (response.ok) {
         
-         
-        
         sessionStorage.setItem("userInfo", JSON.stringify(updatedUser));
         setSavedUser(updatedUser);
         setCurrentPassword("");
@@ -184,7 +198,7 @@ const handleMultiple = (e) => {
   };
 
   return (
-    <Box>
+    <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
       <Paper>
         <Divider sx={{ my: 2 }} />
 
@@ -215,7 +229,7 @@ const handleMultiple = (e) => {
             <TextField label="Last Name" fullWidth value={lastName}
               onChange={(e) => setLastName(e.target.value)}
             />
-            <TextField label="Birht Day" fullWidth value={birthDay}
+            <TextField label="Birth Day" fullWidth value={birthDay}
               onChange={(e) => setBirthDay(e.target.value)}
             />
           </Box>
@@ -251,14 +265,6 @@ const handleMultiple = (e) => {
                   <MenuItem value="Women">Women</MenuItem>
                   <MenuItem value="TransMan">Transgender Man</MenuItem>
                   <MenuItem value="TransWomen">Transgender Women</MenuItem>
-              </Select>
-          </FormControl>
-          <FormControl fullWidth>
-            <InputLabel>Member</InputLabel>
-              <Select
-               name="member" value={member} onChange={(e) => setMember(e.target.value)} label="Member">
-                   <MenuItem value="Free">Free</MenuItem>
-                   <MenuItem value="Paid">Paid</MenuItem>
               </Select>
           </FormControl>
 
@@ -319,13 +325,25 @@ const handleMultiple = (e) => {
           <Divider sx={{ my: 3 }}>
             <Typography color="textSecondary">Be Premium!</Typography>
           </Divider>
-           <Button 
-            fullWidth
-            variant="outlined"
+
+          <Button
             onClick={() => navigate('/payment')}
-           sx={{ color: "#f680dc", borderColor: "#f680dc", mb: 2 }}>
-              Go to Payment Page
+            variant="contained"
+            sx={{
+              borderRadius: "999px",
+              px: 4,
+              py: 1.5,
+              backgroundColor: "#f680dc",
+              fontWeight: 600,
+              textTransform: "none",
+              "&:hover": {
+                backgroundColor: "#d46bb8",
+              },
+            }}
+          >
+              🪪 Upgrade to Premium
           </Button>
+          
           <Divider sx={{ my: 3 }}>
             <Typography color="textSecondary">Security & Password</Typography>
           </Divider>

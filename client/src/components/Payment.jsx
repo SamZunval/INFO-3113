@@ -16,19 +16,22 @@ import logo from "../assets/Ducky.png";
 
 const Payment = () => {
     const navigate = useNavigate();
-    
+    const [error] = useState("");
+
     const [cardData, setCardData] = useState({
+        userName: (sessionStorage.getItem("userName")) || "",
         firstName: "",
         lastName: "",
         cardNumber: "",
         expiryDate: "",
         securityCode: "",
         email: "",
-        cardPostalCode: "",
+        postalCode: "",
+        member: ""
+
     });
 
     const PAYMENT_AMOUNT = "5.00$";
-    const [error, setError] = useState("");
 
     const handleChange = (e) => {
       setCardData({ ...cardData, [e.target.name]: e.target.value });
@@ -37,19 +40,30 @@ const Payment = () => {
     const handlePayment = async () => {
   
         console.log("[Profile Update] Sending updated data to server:", cardData);
+        const user = sessionStorage.getItem("userInfo");
+        const userData = JSON.parse(user);
 
-        try {
-        const response = await api.users.updateUser(cardData);
-        if (response.ok) {
-            sessionStorage.setItem("userInfo", JSON.stringify(cardData));
+        const updatedUser = {
+            ...userData,
+            ...cardData,
+            member: "Paid"
+        };
 
-            alert("Profile updated successfully!");
-        } else {
-            alert("Failed to update profile on the server.");
-        }
+        try 
+        {
+            const response = await api.users.updateUser(updatedUser);
+
+            if (response.ok) {
+                sessionStorage.setItem("userInfo", JSON.stringify(updatedUser));
+
+                alert("Profile updated successfully!");
+                navigate("/Search");
+            } else {
+                alert("Failed to update profile on the server.");
+            }
         } catch (error) {
-        console.error("Error updating user:", error);
-        alert("An error occurred while saving.");
+            console.error("Error updating user:", error);
+            alert("An error occurred while saving.");
         }
     };    
 

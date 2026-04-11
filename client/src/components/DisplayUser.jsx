@@ -5,7 +5,8 @@ import {
   CardMedia,
   Typography,
   Box,
-  Chip
+  Chip,
+  Paper
 } from '@mui/material';
 import { LocationOn } from '@mui/icons-material';
 import * as api from '../util/api';
@@ -110,7 +111,8 @@ const DisplayUser = ({ user: initialUser }) => {
       }
 
       return age > 0 ? age : null;
-    } catch (error) {
+    } 
+    catch  {
       return null;
     }
   };
@@ -118,84 +120,93 @@ const DisplayUser = ({ user: initialUser }) => {
   const age = calculateAge(user.birthDay);
 
   return (
-    <Card
+    <Box
       sx={{
-        maxWidth: 450,
-        width: '100%',
-        height: 680,
-        position: 'relative',
-        borderRadius: 3,
-        boxShadow: 5,
-        overflow: 'hidden',
-        bgcolor: '#ffffff',
-        border: '1px solid #e0e0e0',
-        '&:hover': {
-          transform: 'scale(1.01)',
-          transition: 'transform 0.2s ease-in-out',
-        }
+        display: "flex",
+        justifyContent: "center",  
+        alignItems: "center",      
+        minHeight: "100vh",         
       }}
     >
-      {/* Profile Picture */}
-      <CardMedia
-        component="img"
-        height="350"
-        image={user.profileImage || "https://picsum.photos/345/350?random=1"}
-        alt={`${user.firstName || user.userName || 'User'}'s profile`}
+      <Card
         sx={{
-          objectFit: 'cover'
-        }}
-        onError={(e) => {
-          e.target.src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzQ1IiBoZWlnaHQ9IjM1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMzQ1IiBoZWlnaHQ9IjM1MCIgZmlsbD0iI2Y1ZjVmNSIvPjxyZWN0IHg9IjEwIiB5PSIxMCIgd2lkdGg9IjMyNSIgaGVpZ2h0PSIyNSIgZmlsbD0iIzk5OSIgcng9IjUiLz48dGV4dCB4PSIxNzIiIHk9IjI3IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTIiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5ObyBJbWFnZSBBdmFpbGFibGU8L3RleHQ+PC9zdmc+";
-        }}
-      />
-
-      <CardContent sx={{ minHeight: 260, bgcolor: '#ffffff' }}>
-        <Typography variant="h4" component="div" sx={{ fontWeight: 'bold', mb: 0.5, color: '#111' }}>
-          {(user.firstName && user.lastName)
-            ? `${user.firstName} ${user.lastName}`
-            : (user.userName || 'Unknown User')
+          maxWidth: 450,
+          width: '100%',
+          height: 'auto',
+          borderRadius: 3,
+          boxShadow: 5,
+          bgcolor: '#ffffff',
+          overflow: 'visible',
+          border: '1px solid #e0e0e0',
+          '&:hover': {
+            transform: 'scale(1.01)',
+            transition: 'transform 0.2s ease-in-out',
           }
-          {age && (
-            <Typography variant="h5" component="span" sx={{ ml: 1, fontWeight: 'normal', color: '#666' }}>
-              {age}
-            </Typography>
-          )}
-        </Typography>
+          
+        }}
+      >
+        {/* Profile Picture */}
+        <CardMedia
+          component="img"
+          height="350"
+          image={user.profileImage || "https://picsum.photos/345/350?random=1"}
+          alt={`${user.firstName || user.userName || 'User'}'s profile`}
+          sx={{
+            objectFit: 'cover'
+          }}
+          onError={(e) => {
+            e.target.src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzQ1IiBoZWlnaHQ9IjM1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMzQ1IiBoZWlnaHQ9IjM1MCIgZmlsbD0iI2Y1ZjVmNSIvPjxyZWN0IHg9IjEwIiB5PSIxMCIgd2lkdGg9IjMyNSIgaGVpZ2h0PSIyNSIgZmlsbD0iIzk5OSIgcng9IjUiLz48dGV4dCB4PSIxNzIiIHk9IjI3IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTIiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5ObyBJbWFnZSBBdmFpbGFibGU8L3RleHQ+PC9zdmc+";
+          }}
+        />
 
-        {(user.city || user.province) && (
-          <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-            <LocationOn sx={{ fontSize: 18, mr: 0.6, color: '#888' }} />
-            <Typography variant="body1" sx={{ color: '#555' }}>
-              {[user.city, user.province].filter(Boolean).join(', ')}
-            </Typography>
-          </Box>
-        )}
-
-        <Typography variant="body1" sx={{ mb: 2, color: '#444' }}>
-          {user.bio || 'No bio provided yet.'}
-        </Typography>
-
-        <Box sx={{ borderTop: '1px solid #e0e0e0', pt: 2 }}>
-          <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1, color: '#333' }}>
-            Details
+        <CardContent sx={{ minHeight: 260, bgcolor: '#ffffff' }}>
+          <Typography variant="h4" component="div" sx={{ fontWeight: 'bold', mb: 0.5, color: '#111' }}>
+            {(user.firstName && user.lastName)
+              ? `${user.firstName} ${user.lastName}`
+              : (user.userName || 'Unknown User')
+            }
+            {age && (
+              <Typography variant="h5" component="span" sx={{ ml: 1, fontWeight: 'normal', color: '#666' }}>
+                {age}
+              </Typography>
+            )}
           </Typography>
-          <Typography variant="body2" sx={{ color: '#333', mb: 0.25 }}>Username: {user.userName || 'N/A'}</Typography>
-          <Typography variant="body2" sx={{ color: '#333', mb: 0.25 }}>Address: {user.address || 'N/A'}</Typography>
-          <Typography variant="body2" sx={{ color: '#333', mb: 0.25 }}>City / Province: {[user.city, user.province].filter(Boolean).join(' / ') || 'N/A'}</Typography>
-          <Typography variant="body2" sx={{ color: '#333', mb: 0.25 }}>Postal Code: {user.postalCode || 'N/A'}</Typography>
-          <Typography variant="body2" sx={{ color: '#333', mb: 0.25 }}>Birthday: {user.birthDay || 'N/A'}</Typography>
-          {user.likes && user.likes.length > 0 && (
-            <Typography variant="body2" sx={{ color: '#333', mb: 0.25 }}>Likes: {user.likes.join(', ')}</Typography>
+
+          {(user.city || user.province) && (
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+              <LocationOn sx={{ fontSize: 18, mr: 0.6, color: '#888' }} />
+              <Typography variant="body1" sx={{ color: '#555' }}>
+                {[user.city, user.province].filter(Boolean).join(', ')}
+              </Typography>
+            </Box>
           )}
-          {user.liked && user.liked.length > 0 && (
-            <Typography variant="body2" sx={{ color: '#333', mb: 0.25 }}>Liked by: {user.liked.join(', ')}</Typography>
-          )}
-          {user.interests && Array.isArray(user.interests) && user.interests.length > 0 && (
-            <Typography variant="body2" sx={{ color: '#333', mt: 0.7 }}>Interests: {user.interests.join(', ')}</Typography>
-          )}
-        </Box>
-      </CardContent>
-    </Card>
+
+          <Typography variant="body1" sx={{ mb: 2, color: '#444' }}>
+            {user.bio || 'No bio provided yet.'}
+          </Typography>
+
+          <Box sx={{ borderTop: '1px solid #e0e0e0', pt: 2 }}>
+            <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1, color: '#333' }}>
+              Details
+            </Typography>
+            <Typography variant="body2" sx={{ color: '#333', mb: 0.25 }}>Username: {user.userName || 'N/A'}</Typography>
+            <Typography variant="body2" sx={{ color: '#333', mb: 0.25 }}>Address: {user.address || 'N/A'}</Typography>
+            <Typography variant="body2" sx={{ color: '#333', mb: 0.25 }}>City / Province: {[user.city, user.province].filter(Boolean).join(' / ') || 'N/A'}</Typography>
+            <Typography variant="body2" sx={{ color: '#333', mb: 0.25 }}>Postal Code: {user.postalCode || 'N/A'}</Typography>
+            <Typography variant="body2" sx={{ color: '#333', mb: 0.25 }}>Birthday: {user.birthDay || 'N/A'}</Typography>
+            {user.likes && user.likes.length > 0 && (
+              <Typography variant="body2" sx={{ color: '#333', mb: 0.25 }}>Likes: {user.likes.join(', ')}</Typography>
+            )}
+            {user.liked && user.liked.length > 0 && (
+              <Typography variant="body2" sx={{ color: '#333', mb: 0.25 }}>Liked by: {user.liked.join(', ')}</Typography>
+            )}
+            {user.interests && Array.isArray(user.interests) && user.interests.length > 0 && (
+              <Typography variant="body2" sx={{ color: '#333', mt: 0.7 }}>Interests: {user.interests.join(', ')}</Typography>
+            )}
+          </Box>
+        </CardContent>
+      </Card>
+    </Box>
   );
 };
 

@@ -41,10 +41,12 @@ import { createTheme, ThemeProvider } from "@mui/material";
       }
       else{
         let user = JSON.parse(sessionStorage.getItem("userInfo"));
+
         if(user.member !== "Admin"){
           alert("This page is admin only!");
           return <Navigate to="/profile" replace />;
         }
+        
       }
       return children;
   };
@@ -78,7 +80,7 @@ const theme = createTheme({
   return (<ThemeProvider theme={theme}>
     
     <BrowserRouter>
-      <Header appTitle="Cupid Community" log={openSnackbar} />
+      <Header appTitle="Duck Dating" log={openSnackbar} />
     
       <Routes>
         <Route path="/" element={<Home log={openSnackbar} />} />

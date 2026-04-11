@@ -16,8 +16,6 @@ import { useNavigate } from "react-router-dom";
 
 import MenuIcon from "@mui/icons-material/Menu";
 
-
-
 const Header = (props) => {
 
  const [anchor, setAnchor] = useState(null);
@@ -31,6 +29,7 @@ const Header = (props) => {
     navigate(path);
     setAnchor(null); 
   };
+
   const adminOnly = () => {
     if (!sessionStorage.getItem("userInfo")) {
       return false;
@@ -40,15 +39,27 @@ const Header = (props) => {
     }
     return false
   }
+
   const paidOnly = () => {
     if (!sessionStorage.getItem("userInfo")) {
       return false;
     }
-    if(JSON.parse(sessionStorage.getItem("userInfo")).member === "Paid"){
+    if(JSON.parse(sessionStorage.getItem("userInfo")).member === "Paid" || JSON.parse(sessionStorage.getItem("userInfo")).member === "Admin"){
       return true;
     }
     return false
   }
+
+    const isLoggedIn = () => {
+      if (!sessionStorage.getItem("userInfo")) {
+        return false;
+      }
+      else{
+        return true;
+      }
+    }
+  
+
   const handleLogout = () => {
     sessionStorage.clear(); // removes EVERYTHING from session storage
     setAnchor(null);
@@ -65,30 +76,58 @@ const Header = (props) => {
           {props.appTitle}
         </Typography>
         <div style={{ flex: 1 }} />
-        <Button style={{ color: "#fffefe" }} onClick={() => navigate("/login")} >Login</Button>
-        <Button style={{ color: "#fffefe" }} onClick={() => navigate("/signup")} >Sign Up </Button>
-        <IconButton style={{ color: "#fffefe" }} onClick={e => setAnchor(e.target)}>
-        <MenuIcon />
-        </IconButton>
+        {!isLoggedIn() &&
+          <Button style={{ color: "#fffefe" }} onClick={() => navigate("/login")} >Login</Button>
+        }        
+        {!isLoggedIn() &&
+          <Button style={{ color: "#fffefe" }} onClick={() => navigate("/signup")} >Sign Up </Button>
+        }
+       
+        {isLoggedIn() && (
+          <IconButton
+            style={{ color: "#fffefe" }}
+            onClick={(e) => setAnchor(e.currentTarget)}
+          >
+            <MenuIcon />
+          </IconButton>
+        )}
+
         <Menu anchorEl={anchor} open={Boolean(anchor)} onClose={() => setAnchor(null)}  
         PaperProps={{sx: {backgroundColor: "#f680dc", color: "#fffefe",minWidth: "250px"},
         }}
          >
-          <MenuItem onClick={() => handleMenuClick("/Profile")}>Profile</MenuItem>
-          {paidOnly() &&
-          <MenuItem onClick={() => handleMenuClick("/swipe")}>Swipe</MenuItem>
-          }
-          {paidOnly() &&
-          <MenuItem onClick={() => handleMenuClick("/Date")}>Date</MenuItem>
-          }
-          <MenuItem onClick={() => handleMenuClick("/DisplayUser")}>UserProfile</MenuItem>
-          {paidOnly() &&
-          <MenuItem onClick={() => handleMenuClick("/Search")}>Search</MenuItem>
-          }
+          <MenuItem 
+          onClick={() => handleMenuClick("/Profile")}>Profile</MenuItem>
+          <MenuItem
+            disabled={!paidOnly()}
+            onClick={() => handleMenuClick("/swipe", true)}
+          >
+            Swipe {!paidOnly() && "🔒"}
+          </MenuItem>
+          <MenuItem
+            disabled={!paidOnly()}
+            onClick={() => handleMenuClick("/Date", true)}
+          >
+            Date {!paidOnly() && "🔒"}
+          </MenuItem>          
+          <MenuItem
+            onClick={() => handleMenuClick("/DisplayUser", true)}
+          >
+            UserProfile 
+          </MenuItem>
+          <MenuItem
+            disabled={!paidOnly()}
+            onClick={() => handleMenuClick("/Search", true)}
+          >
+            Search {!paidOnly() && "🔒"}
+          </MenuItem>         
+          <MenuItem
+            disabled={!paidOnly()}
+            onClick={() => handleMenuClick("/Loves", true)}
+          >
+            Love {!paidOnly() && "🔒"}
+          </MenuItem>            
           <MenuItem onClick={() => handleMenuClick("/Payment")}>Payment</MenuItem>
-          {paidOnly() &&
-          <MenuItem onClick={() => handleMenuClick("/Loves")}>Matches</MenuItem>
-          }
 
           {adminOnly() &&
             <MenuItem onClick={() => handleMenuClick("/Dashboard")}>Management Dashboard</MenuItem>

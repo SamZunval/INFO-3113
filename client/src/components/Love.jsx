@@ -5,11 +5,19 @@ import {
   Typography,
   Button,
   CardMedia,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import * as api from "../util/api"; 
 
 const Love = () => {
   const [usermarks, setusermarks] = useState([]);
+  
+  //modal states 
+  const [open, setOpen] = useState(false);
+  const [contactInfo, setContactInfo] = useState("");
 
   useEffect(() => {
           const loadMatches = async () => {
@@ -20,15 +28,13 @@ const Love = () => {
           }
           loadMatches();
       }, []);
-    const handleContact = async (email) => {
-      await api.stats.updateCount();
-      alert(email);
-    }
+
     const handleBlock = async (username) => {
       let user = JSON.parse(sessionStorage.getItem("userInfo")).userName;
       await api.users.blockUser(user,username);
     }
-  //if (!usermarks) return <></>;
+
+    
 
   return (
     <Box sx={{ maxWidth: 700, margin: "2rem auto",color: "#f680dc"}}>
@@ -71,17 +77,39 @@ const Love = () => {
             Birthday: {user.birthDay}
           </div>
           <Button fullWidth variant="contained" 
-                              onClick={() => {handleContact(user.email)}}
-                          >
-                              Display Contact Information
+            onClick={() => {
+              setContactInfo(user.email);
+              setOpen(true);
+            }}          
+          >
+            Display Contact Information
           </Button>
+          
           <Button fullWidth variant="contained"
-                              onClick={() =>{handleBlock(user.userName)}}
-                          >
-                              Block user
+              onClick={() =>{handleBlock(user.userName)}}
+          >
+              Block user
           </Button>
         </Paper>
       ))}
+
+    {/* MODAL */}
+      <Dialog open={open} onClose={() => setOpen(false)}>
+        <DialogTitle>Contact Information</DialogTitle>
+
+        <DialogContent>
+          <Typography>
+            {contactInfo}
+          </Typography>
+        </DialogContent>
+
+        <DialogActions>
+          <Button onClick={() => setOpen(false)}>
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
+
     </Box>
   );
 };
